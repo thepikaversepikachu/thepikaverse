@@ -3,186 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pika Verse NFT WhiteList</title>
+    <title>Pika Verse | Golden Status</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pika-gold: #ffee00; --pika-blue: #1da1f2; }
+        :root { --pika-yellow: #FFCB05; --golden-glow: #FFD700; --pika-blue: #2A75BB; }
         
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Segoe UI', Arial, sans-serif; }
-
-        /* Background Video */
-        #bg-video {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            min-width: 100%;
-            min-height: 100%;
-            object-fit: cover;
-            z-index: -1;
+        body { 
+            background: #000; 
+            color: white; 
+            font-family: 'Outfit', sans-serif; 
+            overflow-x: hidden;
+            margin: 0;
         }
 
-        .container { 
-            background: rgba(22, 22, 22, 0.85); 
-            width: 90%; 
-            max-width: 400px; 
-            padding: 30px; 
-            border-radius: 24px; 
-            text-align: center; 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-            position: absolute;
-            top: 50%;
-            left: 50%;
+        .cartoon-font { font-family: 'Bangers', cursive; letter-spacing: 2px; }
+
+        /* --- NEW GOLDEN LIGHTING BACKGROUND --- */
+        .golden-bg {
+            position: fixed; inset: 0; z-index: -2;
+            background: radial-gradient(circle at center, #4b3b00 0%, #000 100%);
+        }
+        
+        /* Electric Sparks/Lightning Effect */
+        .golden-sparks {
+            position: fixed; inset: 0; z-index: -1;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.3;
+            animation: pulse-glow 3s infinite alternate;
+        }
+
+        /* Lighting Ray Effect */
+        .light-ray {
+            position: absolute; top: 50%; left: 50%;
+            width: 150vw; height: 150vh;
+            background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.1), transparent 40deg);
             transform: translate(-50%, -50%);
-            backdrop-filter: blur(12px);
+            animation: rotate-ray 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate-ray { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        @keyframes pulse-glow { from { opacity: 0.2; } to { opacity: 0.5; } }
+
+        /* Pokemon Decoration */
+        .pkmn-decor {
+            position: fixed; z-index: -1; pointer-events: none;
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.4));
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Comic Card with Golden Border */
+        .comic-card {
+            background: white;
+            border: 8px solid #000;
+            border-radius: 40px;
+            box-shadow: 15px 15px 0px #000, 0 0 50px rgba(255, 215, 0, 0.3);
+            color: #333;
+            position: relative;
+            transform: rotate(-1deg);
+        }
+
+        .text-stroke {
+            color: var(--pika-yellow);
+            -webkit-text-stroke: 2px #000;
+            text-shadow: 5px 5px 0px #000;
         }
         
-        /* Jigsaw Puzzle (9 pieces) */
-        #puzzle-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 300px; margin: 20px auto; border: 3px solid #333; background: rgba(0,0,0,0.5); padding: 4px; border-radius: 8px; }
-        .tile { width: 100px; height: 100px; background-image: url('https://i2c.seadn.io/collection/the-pika-vers/image_type_preview_media/68b94efc21150fb19d4db70bfedef0/3668b94efc21150fb19d4db70bfedef0.jpeg?w=1000'); background-size: 300px 300px; cursor: grab; border-radius: 4px; }
-
-        h1 { background: linear-gradient(to right, var(--pika-blue), var(--pika-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 22px; font-weight: 800; margin-top: 0; }
-        section { display: none; color: white; }
-        section.active { display: block; animation: slideUp 0.5s ease; }
-        
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .form-group { text-align: left; margin-bottom: 15px; }
-        label { font-size: 13px; color: #aaa; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.7); border: 1px solid #333; color: white; border-radius: 10px; box-sizing: border-box; font-size: 14px; }
-        button { width: 100%; padding: 16px; background: white; color: black; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; font-size: 16px; transition: 0.3s; }
-        
-        .task-list { text-align: left; background: rgba(31, 31, 31, 0.6); padding: 15px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; font-size: 14px; }
-        a { color: var(--pika-blue); text-decoration: none; font-weight: bold; }
-
-        /* Success Message */
-        .success-box { display: none; animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 20px 0; }
-        @keyframes popIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        .submitted-text { 
-            font-size: 38px; 
-            font-weight: 900; 
-            background: linear-gradient(45deg, #00ffcc, #0072ff); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-            margin-bottom: 10px;
+        .status-badge {
+            background: #FF1F1F;
+            color: white;
+            padding: 5px 20px;
+            border: 4px solid #000;
+            display: inline-block;
+            transform: rotate(5deg);
+            box-shadow: 5px 5px 0px #000;
         }
-        .follow-update { font-size: 14px; color: #ccc; margin-top: 15px; line-height: 1.5; }
+
+        .btn-thunder {
+            background: var(--pika-yellow);
+            border: 4px solid #000;
+            color: #000;
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            border-radius: 20px;
+            box-shadow: 8px 8px 0px #000;
+            transition: 0.2s;
+        }
+        .btn-thunder:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 4px 4px 0px #000;
+            background: #fff;
+        }
+
+        .charmander { bottom: 20px; left: 50px; width: 140px; }
+        .squirtle { bottom: 20px; right: 50px; width: 140px; transform: scaleX(-1); }
+        .pika-main { top: -80px; left: 50%; transform: translateX(-50%); width: 180px; z-index: 10; }
+
     </style>
 </head>
-<body>
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <video autoplay muted loop playsinline id="bg-video">
-        <source src="https://cdn.pixabay.com/video/2024/10/16/236687_large.mp4" type="video/mp4">
-    </video>
+    <div class="golden-bg"></div>
+    <div class="light-ray"></div>
+    <div class="golden-sparks"></div>
 
-<div class="container">
-    <section id="page1" class="active">
-        <h1>Solve to Enter The Pika Verse NFT WL</h1>
-        <p style="font-size: 14px; color: #ccc;">Match the Pikachu picture then go to the next heat for WL.</p>
-        <div id="puzzle-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
-        <p style="color: #bbb; font-size: 12px;">Drag and swap pieces to fix the image!</p>
-    </section>
+    <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/004.png" class="pkmn-decor charmander hidden md:block" alt="Charmander">
+    <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/007.png" class="pkmn-decor squirtle hidden md:block" alt="Squirtle">
 
-    <section id="page2">
-        <h1>Complete Tasks</h1>
-        <div class="task-list">
-            <p>1. Follow <a href="https://x.com/intent/follow?screen_name=thepikachuverse" target="_blank">@thepikachuverse</a></p>
-            <p>2. Like & RT <a href="https://x.com/intent/retweet?tweet_id=2031054504993632648" target="_blank">Pinned Post</a></p>
-            <p>3. Tag 3 friends & Quote the post</p>
-        </div>
-        <button onclick="showPage(3)">I've Done All Tasks</button>
-    </section>
+    <div class="max-w-2xl w-full mt-20">
+        <div class="comic-card p-8 md:p-12 text-center">
+            
+            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" class="absolute pika-main drop-shadow-2xl" alt="Pikachu">
 
-    <section id="page3">
-        <div id="form-content">
-            <h1>WhiteList Submission</h1>
-            <form id="gsheet-form">
-                <div class="form-group"><label>Twitter Username</label><input type="text" name="username" placeholder="@username" required></div>
-                <div class="form-group"><label>Wallet Address (EVM)</label><input type="text" name="wallet" placeholder="0x..." required></div>
-                <div class="form-group"><label>Comment Link</label><input type="url" name="comment_link" placeholder="https://x.com/..." required></div>
-                <div class="form-group">
-                    <label>Did you comment & tag friends?</label>
-                    <select name="comment_status"><option value="Yes">Yes, I did</option><option value="No">No</option></select>
+            <div class="mt-12">
+                <div class="status-badge cartoon-font text-xl mb-6">ATTENTION HUNTERS!</div>
+                
+                <h1 class="cartoon-font text-5xl md:text-7xl text-stroke mb-4 uppercase">WL FCFS<br>IS CLOSED!</h1>
+                
+                <div class="space-y-4 px-4 mt-6">
+                    <p class="text-xl font-black uppercase italic tracking-tight text-yellow-600">
+                        The Thunder Has Settled! ⚡
+                    </p>
+                    <p class="text-gray-700 font-bold leading-tight">
+                        All FCFS slots have been claimed. But stay alert, a new energy is rising!
+                    </p>
+                    
+                    <div class="bg-yellow-50 border-4 border-dashed border-yellow-500 p-4 rounded-2xl">
+                        <p class="cartoon-font text-2xl text-red-600">GTD ACCESS IS COMING SOON!</p>
+                        <p class="text-xs font-bold text-gray-400 uppercase">Be ready for the Guaranteed Phase!</p>
+                    </div>
                 </div>
-                <button type="submit" id="submitBtn">Submit to WhiteList</button>
-            </form>
-        </div>
 
-        <div id="success-message" class="success-box">
-            <div class="submitted-text">Wl submitted ✔️</div>
-            <div class="follow-update">
-                Stay updated on your status! <br>
-                <a href="https://x.com/thepikachuverse" target="_blank">Follow @thepikachuverse on X</a>
+                <div class="mt-10">
+                    <a href="https://x.com/thepikachuverse" target="_blank" class="btn-thunder cartoon-font inline-block">
+                        FOLLOW @THEPIKACHUVERSE ⚡
+                    </a>
+                </div>
             </div>
+
+            <div class="absolute -top-5 -left-5 bg-blue-500 text-white p-2 border-4 border-black rounded-full font-black text-xs">999 SUPPLY</div>
+            <div class="absolute -bottom-5 -right-5 bg-yellow-400 text-black p-2 border-4 border-black rounded-lg font-black text-xs italic">MINT 18.03.2026</div>
         </div>
-    </section>
-</div>
+        
+        <p class="text-center mt-12 cartoon-font text-yellow-500 opacity-60 text-sm tracking-widest">© THE PIKA VERSE PROTOCOL</p>
+    </div>
 
-<script>
-    function showPage(n) { 
-        document.querySelectorAll('section').forEach(s => s.classList.remove('active')); 
-        document.getElementById('page'+n).classList.add('active'); 
-    }
-
-    const container = document.getElementById('puzzle-container');
-    let pieces = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-    let shuffled = [...pieces].sort(() => Math.random() - 0.5);
-
-    function createBoard() {
-        container.innerHTML = "";
-        shuffled.forEach((pos, index) => {
-            let tile = document.createElement('div');
-            tile.className = 'tile';
-            tile.draggable = true;
-            tile.id = 'tile-' + index;
-            tile.style.backgroundPosition = `-${(pos % 3) * 100}px -${Math.floor(pos / 3) * 100}px`;
-            tile.ondragstart = (e) => e.dataTransfer.setData("text", index);
-            container.appendChild(tile);
-        });
-    }
-
-    function allowDrop(e) { e.preventDefault(); }
-    function drop(e) {
-        e.preventDefault();
-        let fromIdx = e.dataTransfer.getData("text");
-        let toIdx = Array.from(container.children).indexOf(e.target);
-        if (toIdx !== -1) {
-            [shuffled[fromIdx], shuffled[toIdx]] = [shuffled[toIdx], shuffled[fromIdx]];
-            createBoard();
-            if (JSON.stringify(shuffled) === JSON.stringify(pieces)) {
-                setTimeout(() => { showPage(2); }, 400);
-            }
-        }
-    }
-    createBoard();
-
-    // FIXED SUBMISSION LOGIC
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxhOljBAb9s8ou3Ek4mYT1TEWsew7bwi4L_7GJM_MmIY7qMZspj_XDAyJmSudBKoUWk/exec'; 
-    const form = document.getElementById('gsheet-form');
-
-    form.addEventListener('submit', e => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.innerText = "Processing...";
-        btn.disabled = true;
-
-        const data = new URLSearchParams(new FormData(form));
-
-        fetch(scriptURL, { 
-            method: 'POST', 
-            body: data, 
-            mode: 'no-cors' 
-        })
-        .then(() => {
-            document.getElementById('form-content').style.display = 'none';
-            document.getElementById('success-message').style.display = 'block';
-        })
-        .catch(error => {
-            alert('Error! Submission failed. Please try again.');
-            btn.innerText = "Retry Submission";
-            btn.disabled = false;
-        });
-    });
-</script>
 </body>
 </html>
