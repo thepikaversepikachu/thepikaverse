@@ -3,240 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIKA VERSE | WALLET CHECKER</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rajdhani:wght@600;700;900&display=swap" rel="stylesheet">
+    <title>Pika Verse | Spot Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&family=Bangers&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --yellow: #f8d030;
-            --dark: #000000;
-            --electric: #fff000;
+        :root { --pika-yellow: #FFCB05; --electric-gold: #FFD700; }
+        
+        body { 
+            background: #000; 
+            color: black; 
+            font-family: 'Outfit', sans-serif; 
+            display: flex; align-items: center; justify-content: center; 
+            min-height: 100vh; margin: 0; overflow: hidden;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ব্যাকগ্রাউন্ড লাইটিং কারেন্ট ইফেক্ট */
+        .lighting-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: #FFCB05; 
+        }
+        
+        .electric-bolt {
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4), transparent 70%);
+            filter: blur(60px);
+            animation: lightning-strike 4s linear infinite;
+        }
 
-        body {
-            background-color: var(--yellow);
-            color: var(--dark);
-            font-family: 'Rajdhani', sans-serif;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        @keyframes lightning-strike {
+            0%, 10%, 20%, 50%, 100% { opacity: 0; transform: scale(1); }
+            5%, 15%, 25% { opacity: 1; transform: scale(1.2); background: white; }
+            55% { opacity: 0.5; background: var(--electric-gold); }
+        }
+
+        /* মেইন চেকার কার্ড */
+        .checker-card {
+            background: #000;
+            color: white;
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            max-width: 550px; width: 95%; text-align: center;
+            position: relative;
+            border: 1px solid rgba(255, 203, 5, 0.3);
+            z-index: 10;
+            margin-top: 50px;
+        }
+
+        /* পিকাচু ইমেজ */
+        .pika-img {
+            width: 120px;
+            position: absolute;
+            top: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            filter: drop-shadow(0 0 15px rgba(255, 203, 5, 0.5));
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); }
+            50% { transform: translate(-50%, -10px); }
+        }
+
+        .header-text { font-family: 'Bangers', cursive; letter-spacing: 2px; color: var(--pika-yellow); }
+
+        /* ইনপুট বক্সের কারেন্ট বর্ডার */
+        .input-container {
+            position: relative;
+            margin: 25px 0;
+            padding: 3px;
+            background: #111;
+            border-radius: 20px;
             overflow: hidden;
         }
 
-        .main-card {
-            width: 92%;
-            max-width: 1100px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(25px);
-            border-radius: 40px;
-            border: 2px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            padding: 40px;
-            position: relative;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
-            text-align: center;
-        }
-
-        .status-tag {
-            background: var(--dark);
-            color: var(--yellow);
-            padding: 6px 20px;
-            border-radius: 50px;
-            font-weight: 900;
-            font-size: 0.75rem;
-            display: inline-block;
-            margin: 0 auto 20px;
-            letter-spacing: 2px;
-        }
-
-        .title {
-            font-family: 'Bungee', cursive;
-            font-size: clamp(2.5rem, 8vw, 4.8rem);
-            line-height: 1;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 0px rgba(255,255,255,0.3);
-        }
-
-        .content-layout {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr 1fr;
-            align-items: center;
-            gap: 30px;
-            margin: 20px 0;
-        }
-
-        .side-info {
-            background: rgba(0,0,0,0.06);
-            padding: 20px;
-            border-radius: 25px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* Character Container with Electric Light */
-        .character-wrap {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; /* ইমেজ নিচ থেকে মেলানোর জন্য */
-        }
-
-        .pika-img {
-            width: 100%;
-            max-width: 380px;
-            z-index: 2;
-            filter: drop-shadow(0 0 20px rgba(255, 240, 0, 0.8));
-        }
-
-        /* Electric Light Aura */
-        .character-wrap::before {
-            content: '';
+        .input-container::before {
+            content: "";
             position: absolute;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(255, 240, 0, 0.6) 0%, transparent 70%);
-            border-radius: 50%;
-            z-index: 1;
-            bottom: 10%;
-            animation: pulse 2s infinite ease-in-out;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(transparent, #FFCB05, transparent 30%);
+            animation: rotate-electric 3s linear infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.3); opacity: 0.8; }
+        @keyframes rotate-electric { 100% { transform: rotate(360deg); } }
+
+        input {
+            position: relative;
+            background: #000;
+            border: none;
+            padding: 18px; 
+            border-radius: 18px;
+            color: white; width: 100%; outline: none; text-align: center;
+            font-size: 16px; z-index: 2;
         }
 
-        .timer-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-top: 15px;
+        .check-btn {
+            background: var(--pika-yellow); color: black; font-weight: 900;
+            padding: 12px 30px; border-radius: 50px; 
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+            font-size: 14px; display: inline-block;
+        }
+        .check-btn:hover { transform: translateY(-2px); box-shadow: 0 0 20px var(--pika-yellow); }
+
+        .result-box { margin-top: 25px; padding: 20px; border-radius: 20px; display: none; text-align: left; }
+        .gtd { border: 2px solid #00E5FF; color: #00E5FF; background: rgba(0, 229, 255, 0.1); }
+        .wl { border: 2px solid var(--pika-yellow); color: var(--pika-yellow); background: rgba(255, 203, 5, 0.1); }
+        .none { border: 1px dashed #ff4d4d; color: #ff4d4d; background: rgba(255, 0, 0, 0.1); }
+
+        /* হোল্ডার বেনিফিট সেকশন */
+        .benefit-tag {
+            display: block; margin-top: 15px; padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 11px; color: #ccc; line-height: 1.4;
+        }
+        .benefit-tag b { color: var(--pika-yellow); }
+
+        /* X পোস্ট বাটন */
+        .x-post-btn {
+            display: inline-block; margin-top: 12px; padding: 8px 15px;
+            background: #fff; color: #000; border-radius: 10px;
+            font-size: 10px; font-weight: 900; text-transform: uppercase;
         }
 
-        .t-box {
-            background: var(--dark);
-            color: white;
-            padding: 12px 5px;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .action-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 18px; border-radius: 12px;
+            font-size: 11px; font-weight: 900; transition: 0.2s;
         }
-
-        .t-box h2 { font-size: 1.8rem; font-family: 'Rajdhani'; font-weight: 900; }
-        .t-box p { font-size: 0.6rem; letter-spacing: 1px; color: var(--yellow); }
-
-        .mining-box {
-            margin-top: 25px;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            padding-top: 25px;
-        }
-
-        .blur-val {
-            filter: blur(10px);
-            font-size: 2.2rem;
-            font-weight: 900;
-            background: rgba(0,0,0,0.1);
-            padding: 0 15px;
-            border-radius: 10px;
-            display: inline-block;
-            user-select: none;
-        }
-
-        .btn-wrap {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-
-        .btn {
-            padding: 16px 35px;
-            border-radius: 15px;
-            text-decoration: none;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-black { background: var(--dark); color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .btn-outline { border: 2.5px solid var(--dark); color: var(--dark); }
-        .btn:hover { transform: translateY(-5px) scale(1.05); }
-
-        @media (max-width: 768px) {
-            body { overflow-y: auto; height: auto; padding: 40px 0; }
-            .content-layout { grid-template-columns: 1fr; gap: 20px; }
-            .pika-img { max-width: 280px; order: -1; }
-            .main-card { width: 95%; padding: 25px; height: auto; border-radius: 30px; }
-            .title { font-size: 2.8rem; }
-            .character-wrap { margin-bottom: 20px; }
-        }
+        .action-btn:hover { background: white; color: black; }
     </style>
 </head>
 <body>
 
-    <div class="main-card">
-        <div class="status-tag">GTD & FCFS ROUNDS ENDED</div>
-        <h1 class="title">PIKA VERSE</h1>
+    <div class="lighting-bg">
+        <div class="electric-bolt"></div>
+    </div>
+
+    <div class="checker-card">
+        <img src="https://i.ibb.co.com/zHHZhH3w/Adobe-Express-file-11.png" class="pika-img" alt="Pika">
         
-        <div class="content-layout">
-            <div class="side-info">
-                <p><strong>UTILITY:</strong> Your NFT generates electricity for $PIKA mining. More Hold = More Power.</p>
-            </div>
+        <h1 class="header-text text-5xl mb-2">CHECK YOUR SPOT</h1>
+        <p class="text-[10px] text-gray-500 tracking-[0.4em] mb-4 uppercase italic">Official Pika Verse Portal</p>
 
-            <div class="character-wrap">
-                <img src="https://i.ibb.co.com/35JPhykk/Adobe-Express-file-12-1.png" class="pika-img" alt="Pika Character">
-            </div>
+        <div class="input-container">
+            <input type="text" id="walletInput" placeholder="Enter Wallet Address (0x...)">
+        </div>
+        
+        <button onclick="checkStatus()" id="mainBtn" class="check-btn">⚡ Verify Status</button>
 
-            <div class="side-info">
-                <p style="font-weight: 700; letter-spacing: 1px;">WALLET CHECKER IN:</p>
-                <div class="timer-row">
-                    <div class="t-box"><h2 id="d">00</h2><p>D</p></div>
-                    <div class="t-box"><h2 id="h">00</h2><p>H</p></div>
-                    <div class="t-box"><h2 id="m">00</h2><p>M</p></div>
-                    <div class="t-box"><h2 id="s">00</h2><p>S</p></div>
-                </div>
+        <div id="result" class="result-box">
+            <h2 id="resTitle" class="font-black text-xl mb-1"></h2>
+            <p id="resDesc" class="text-sm italic"></p>
+            
+            <a id="xPostLink" href="#" target="_blank" class="x-post-btn" style="display: none;">🚀 UPGRADE MY SPOT</a>
+
+            <div class="benefit-tag">
+                ⚡ <b>Holder Utility:</b> Your NFT is a playable character in our upcoming game. 
+                Holding increases your <b>Mining Frequency</b> to earn <b>$PIKA</b> tokens daily. 
+                Don't list your NFT; hold to evolve!
             </div>
         </div>
 
-        <div class="mining-box">
-            <p style="font-weight: 900; margin-bottom: 8px; color: #444;">ESTIMATED DAILY $PIKA REWARD</p>
-            <div class="blur-val">12,500.00 $PIKA</div>
-            <p style="font-size: 0.8rem; color: #555; margin-top: 8px;">NFT Holders can mine $PIKA by playing the Verse Game.</p>
+        <div class="grid grid-cols-3 gap-2 mt-8 py-4 border-y border-white/10 text-[10px] font-black text-yellow-500 uppercase">
+            <div>Supply: 999</div>
+            <div>Date: 18.03.2026</div>
+            <div>Base Chain</div>
         </div>
 
-        <div class="btn-wrap">
-            <a href="https://opensea.io/collection/the-pika-vers/overview" target="_blank" class="btn btn-black">MINT PAGE</a>
-            <a href="https://x.com/thepikachuverse" target="_blank" class="btn btn-outline">FOLLOW ON X</a>
-        </div>
-
-        <div style="margin-top: 25px; font-size: 0.8rem; letter-spacing: 3px; font-weight: 900; color: rgba(0,0,0,0.5);">
-            MINT: MARCH 18 | SUPPLY: 999 | BASE CHAIN
+        <div class="flex gap-3 mt-6 justify-center">
+            <a href="https://opensea.io/collection/the-pika-vers/overview" target="_blank" class="action-btn">MINT PAGE</a>
+            <a href="https://x.com/thepikachuverse" target="_blank" class="action-btn">FOLLOW X</a>
         </div>
     </div>
 
     <script>
-        // Target: Today 12:00 UTC
-        const target = new Date();
-        target.setUTCHours(12, 0, 0, 0);
+        // আপনার Google Script URL এখানে বসাবেন
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8FQ5KUZuQdzp8euGZEupROGEzLDMFKE-foDTVMOPnQyMbHemTnWiH26L5FFiRbluR/exec';
 
-        function updateTimer() {
-            const now = new Date().getTime();
-            const diff = target - now;
-            if (diff > 0) {
-                document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-                document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
-                document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
-                document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+        async function checkStatus() {
+            const wallet = document.getElementById('walletInput').value.trim().toLowerCase();
+            const res = document.getElementById('result');
+            const btn = document.getElementById('mainBtn');
+            const xLink = document.getElementById('xPostLink');
+
+            if (wallet.length < 42) { alert("Invalid wallet address!"); return; }
+
+            btn.innerText = "VERIFYING...";
+            res.style.display = "none";
+            xLink.style.display = "none";
+
+            try {
+                const response = await fetch(`${SCRIPT_URL}?wallet=${wallet}`);
+                const data = await response.json();
+                res.style.display = "block";
+
+                if (data.type === "GTD") {
+                    res.className = "result-box gtd";
+                    document.getElementById('resTitle').innerText = "GTD ACCESS CONFIRMED!";
+                    document.getElementById('resDesc').innerText = "Congratulations! Your spot is guaranteed.";
+                    xLink.style.display = "none";
+                } else if (data.type === "WL") {
+                    res.className = "result-box wl";
+                    document.getElementById('resTitle').innerText = "WL FCFS ELIGIBLE!";
+                    document.getElementById('resDesc').innerText = "You are on the FCFS list. Want GTD?";
+                    
+                    // WL থেকে GTD তে আপগ্রেড করার লিঙ্ক
+                    xLink.href = "https://x.com/intent/tweet?text=I%20just%20secured%20my%20WL%20spot%20in%20The%20Pika%20Verse!%20%E2%9A%A1%20Requesting%20GTD%20upgrade%20@thepikachuverse%0A%0AMint%20Date:%20March%2018%0AChain:%20Base%0ALink:%20https://opensea.io/collection/the-pika-vers/overview%0A%0AMy%20Wallet:%20[PASTE_ADDRESS]%0A%0AThePikaVerse%20Base%20NFT";
+                    xLink.innerText = "🚀 Upgrade to GTD";
+                    xLink.style.display = "inline-block";
+                } else {
+                    res.className = "result-box none";
+                    document.getElementById('resTitle').innerText = "NOT ELIGIBLE";
+                    document.getElementById('resDesc').innerText = "Post about us to get a WL spot!";
+                    
+                    // Not Eligible থেকে WL পাওয়ার লিঙ্ক
+                    xLink.href = "https://x.com/intent/post?text=Checking%20my%20eligibility%20for%20%40thepikachuverse.%20Can%27t%20wait%20to%20join%20the%20movement!%20%E2%9A%A1%0A%0AMint%20Date%3A%20March%2018%0AChain%3A%20Base%0ALink%3A%20https%3A%2F%2Fopensea.io%2Fcollection%2Fthe-pika-vers%2Foverview%0A%0AAdd%20me%20to%20WL%3A%20%5BPASTE_ADDRESS%5D%0A%0AThePikaVerse%20Base%20NFT%20Whitelist";
+                    xLink.innerText = "⚡ Apply for WL Spot";
+                    xLink.style.display = "inline-block";
+                }
+            } catch (e) {
+                alert("Error! Please check if your Google Script URL is correct.");
             }
+            btn.innerText = "⚡ Verify Status";
         }
-        setInterval(updateTimer, 1000);
-        updateTimer();
     </script>
 </body>
 </html>
