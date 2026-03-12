@@ -3,207 +3,240 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Pika Verse | GTD Quest</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <title>PIKA VERSE | WALLET CHECKER</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Rajdhani:wght@600;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pika-yellow: #FFEA00; --thunder-blue: #00E5FF; }
-        body { background: #000; color: white; font-family: 'Outfit', sans-serif; overflow: hidden; }
-        .header-font { font-family: 'Syncopate', sans-serif; }
-
-        .bg-overlay {
-            position: fixed; inset: 0; z-index: -1;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.9)),
-                        url('https://images.alphacoders.com/132/1321727.png');
-            background-size: cover; background-position: center;
+        :root {
+            --yellow: #f8d030;
+            --dark: #000000;
+            --electric: #fff000;
         }
 
-        .page { display: none; height: 100vh; width: 100vw; flex-direction: column; align-items: center; justify-content: center; position: absolute; inset: 0; }
-        .active { display: flex !important; animation: fadeIn 0.8s forwards; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* --- POKEBALL SPLIT --- */
-        .pokeball-wrapper { position: relative; width: 180px; height: 180px; cursor: pointer; }
-        .ball-part { position: absolute; width: 100%; height: 50%; left: 0; border: 6px solid #111; transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-        .top-half { top: 0; background: #ff1c1c; border-radius: 90px 90px 0 0; }
-        .bottom-half { bottom: 0; background: white; border-radius: 0 0 90px 90px; }
-        .center-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; background: white; border: 6px solid #111; border-radius: 50%; z-index: 5; }
-        .split-top { transform: translateY(-150vh) rotate(-15deg); }
-        .split-bottom { transform: translateY(150vh) rotate(15deg); }
-        .flash { position: fixed; inset: 0; background: white; opacity: 0; pointer-events: none; z-index: 100; }
-        @keyframes flash-anim { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
-
-        /* --- TASK STYLING --- */
-        .task-box { background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; transition: 0.3s; cursor: pointer; }
-        .task-box.completed { border-color: #00FF00; background: rgba(0, 255, 0, 0.1); }
-
-        /* --- PAGE 4: PREMIUM SUBMISSION CARD --- */
-        .submit-card { 
-            background: linear-gradient(135deg, rgba(20,20,20,0.95), rgba(0,0,0,0.9));
-            border: 2px solid #333; border-radius: 40px; box-shadow: 0 0 50px rgba(255,234,0,0.1);
+        body {
+            background-color: var(--yellow);
+            color: var(--dark);
+            font-family: 'Rajdhani', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
-        .thunderball-submit {
-            background: radial-gradient(circle at center, #FFEA00, #FFA500);
-            border: none; color: black; font-weight: 900; border-radius: 50px;
-            box-shadow: 0 0 30px #FFEA00; transition: 0.5s; cursor: pointer;
-        }
-        .thunderball-submit:hover { transform: scale(1.02); box-shadow: 0 0 60px #FFEA00; }
 
-        /* Updated Larger Input Boxes */
-        input { 
-            background: rgba(255, 255, 255, 0.05); 
-            border: 2px solid rgba(255, 255, 255, 0.1); 
-            padding: 18px 24px; 
-            border-radius: 16px; 
-            color: white; 
-            width: 100%; 
-            outline: none; 
-            font-size: 16px; 
-            transition: 0.3s;
+        .main-card {
+            width: 92%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border-radius: 40px;
+            border: 2px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+            text-align: center;
         }
-        input:focus { border-color: var(--pika-yellow); background: rgba(255, 255, 0, 0.05); }
-        input::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+        .status-tag {
+            background: var(--dark);
+            color: var(--yellow);
+            padding: 6px 20px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 0.75rem;
+            display: inline-block;
+            margin: 0 auto 20px;
+            letter-spacing: 2px;
+        }
+
+        .title {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.8rem);
+            line-height: 1;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0px rgba(255,255,255,0.3);
+        }
+
+        .content-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr 1fr;
+            align-items: center;
+            gap: 30px;
+            margin: 20px 0;
+        }
+
+        .side-info {
+            background: rgba(0,0,0,0.06);
+            padding: 20px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Character Container with Electric Light */
+        .character-wrap {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end; /* ইমেজ নিচ থেকে মেলানোর জন্য */
+        }
+
+        .pika-img {
+            width: 100%;
+            max-width: 380px;
+            z-index: 2;
+            filter: drop-shadow(0 0 20px rgba(255, 240, 0, 0.8));
+        }
+
+        /* Electric Light Aura */
+        .character-wrap::before {
+            content: '';
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(255, 240, 0, 0.6) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: 1;
+            bottom: 10%;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.3); opacity: 0.8; }
+        }
+
+        .timer-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .t-box {
+            background: var(--dark);
+            color: white;
+            padding: 12px 5px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .t-box h2 { font-size: 1.8rem; font-family: 'Rajdhani'; font-weight: 900; }
+        .t-box p { font-size: 0.6rem; letter-spacing: 1px; color: var(--yellow); }
+
+        .mining-box {
+            margin-top: 25px;
+            border-top: 1px solid rgba(0,0,0,0.1);
+            padding-top: 25px;
+        }
+
+        .blur-val {
+            filter: blur(10px);
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: rgba(0,0,0,0.1);
+            padding: 0 15px;
+            border-radius: 10px;
+            display: inline-block;
+            user-select: none;
+        }
+
+        .btn-wrap {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 16px 35px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-black { background: var(--dark); color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .btn-outline { border: 2.5px solid var(--dark); color: var(--dark); }
+        .btn:hover { transform: translateY(-5px) scale(1.05); }
+
+        @media (max-width: 768px) {
+            body { overflow-y: auto; height: auto; padding: 40px 0; }
+            .content-layout { grid-template-columns: 1fr; gap: 20px; }
+            .pika-img { max-width: 280px; order: -1; }
+            .main-card { width: 95%; padding: 25px; height: auto; border-radius: 30px; }
+            .title { font-size: 2.8rem; }
+            .character-wrap { margin-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="bg-overlay"></div>
-    <div id="flash-layer" class="flash"></div>
+    <div class="main-card">
+        <div class="status-tag">GTD & FCFS ROUNDS ENDED</div>
+        <h1 class="title">PIKA VERSE</h1>
+        
+        <div class="content-layout">
+            <div class="side-info">
+                <p><strong>UTILITY:</strong> Your NFT generates electricity for $PIKA mining. More Hold = More Power.</p>
+            </div>
 
-    <section id="page1" class="page active">
-        <div class="pokeball-wrapper" onclick="startSequence()">
-            <div id="top" class="ball-part top-half"></div>
-            <div id="center-ball" class="center-btn"></div>
-            <div id="bottom" class="ball-part bottom-half"></div>
-        </div>
-        <p class="header-font text-xs mt-10 tracking-[0.5em] text-yellow-400 animate-pulse">TOUCH TO ENTER</p>
-    </section>
+            <div class="character-wrap">
+                <img src="https://i.ibb.co.com/35JPhykk/Adobe-Express-file-12-1.png" class="pika-img" alt="Pika Character">
+            </div>
 
-    <section id="page2" class="page">
-        <div class="max-w-xl text-center px-6 bg-black/40 p-10 rounded-[50px] backdrop-blur-md border border-white/5">
-            <h1 class="header-font text-4xl text-[var(--pika-yellow)] mb-6 uppercase">THE PIKA VERSE GTD</h1>
-            <p class="text-gray-300 text-lg mb-10">You have unlocked the gateway. The Pika Verse is calling for its champions. Complete the electrical trials and secure your spot in the legend.</p>
-            <button onclick="nextPage(3)" class="bg-transparent border-2 border-yellow-400 text-yellow-400 px-10 py-4 rounded-full font-bold header-font hover:bg-yellow-400 hover:text-black transition">⚡ ENTER TRIALS</button>
-        </div>
-    </section>
-
-    <section id="page3" class="page">
-        <h2 class="header-font text-3xl mb-8 text-white">ELECTRICAL <span class="text-yellow-400">TASKS</span></h2>
-        <div class="w-full max-w-xl space-y-4 px-6">
-            <div id="t1" onclick="completeTask(1, 'https://x.com/intent/follow?screen_name=thepikachuverse')" class="task-box p-5 flex items-center justify-between">
-                <span class="font-bold">Follow @thepikachuverse</span>
-                <span id="check1" class="text-2xl">⚡</span>
-            </div>
-            <div id="t2" onclick="completeTask(2, 'https://x.com/intent/like?tweet_id=2031329292798550130')" class="task-box p-5 flex items-center justify-between">
-                <span class="font-bold">Like the Quest Tweet</span>
-                <span id="check2" class="text-2xl">⚡</span>
-            </div>
-            <div id="t3" onclick="completeTask(3, 'https://x.com/intent/retweet?tweet_id=2031329292798550130')" class="task-box p-5 flex items-center justify-between">
-                <span class="font-bold">Repost the Quest Tweet</span>
-                <span id="check3" class="text-2xl">⚡</span>
-            </div>
-            <div id="t4" onclick="completeTask(4, 'https://x.com/thepikachuverse/status/2031329292798550130')" class="task-box p-5 flex items-center justify-between">
-                <span class="font-bold">Comment on the Tweet</span>
-                <span id="check4" class="text-2xl">⚡</span>
-            </div>
-            <div id="t5" onclick="completeTask(5, 'https://x.com/intent/post?text=%40thepikachuverse%20mint%20is%20coming%20soon.%0A%0AMint%20Date%3A%2003.18.2026%0AMint%20Link%3A%20https%3A%2F%2Fopensea.io%2Fcollection%2Fthe-pika-vers%2Foverview%0A%0AEarly%20supporters%20still%20have%20a%20chance%20to%20secure%20a%20GTD%20spot%20before%20mint.%0A%0AGTD%20Application%3A%20https%3A%2F%2Fthepikaverse.art')" class="task-box p-5 flex items-center justify-between">
-                <span class="font-bold">Share Meme & Tag Verse</span>
-                <span id="check5" class="text-2xl">⚡</span>
-            </div>
-            
-            <p id="task-msg" class="text-[10px] text-center text-red-500 font-bold uppercase tracking-widest mt-2">Complete all 5 tasks to proceed</p>
-            
-            <button id="next-to-final" onclick="nextPage(4)" disabled class="w-full py-4 mt-4 bg-white text-black font-black rounded-full uppercase italic disabled:opacity-20">Verify Submission</button>
-        </div>
-    </section>
-
-    <section id="page4" class="page">
-        <div class="w-full max-w-lg submit-card p-10 mx-6 relative overflow-hidden">
-            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" class="absolute -bottom-10 -right-10 w-40 opacity-20 pointer-events-none" alt="Pika">
-            
-            <h2 class="header-font text-2xl mb-8 text-center text-yellow-400 uppercase">Verification</h2>
-            
-            <form id="pikaFinalForm" class="space-y-6">
-                <input type="text" name="username" id="form-user" placeholder="𝕏 Handle (@username)" required>
-                
-                <div class="flex items-center gap-4 bg-white/5 p-4 rounded-2xl border-2 border-white/10">
-                    <input type="checkbox" id="form-check" required class="w-6 h-6 accent-yellow-400">
-                    <label class="text-sm text-gray-400 italic">Confirm all tasks completed.</label>
+            <div class="side-info">
+                <p style="font-weight: 700; letter-spacing: 1px;">WALLET CHECKER IN:</p>
+                <div class="timer-row">
+                    <div class="t-box"><h2 id="d">00</h2><p>D</p></div>
+                    <div class="t-box"><h2 id="h">00</h2><p>H</p></div>
+                    <div class="t-box"><h2 id="m">00</h2><p>M</p></div>
+                    <div class="t-box"><h2 id="s">00</h2><p>S</p></div>
                 </div>
-
-                <input type="text" name="meme_link" placeholder="Meme Post Link" required>
-                <input type="text" name="wallet" placeholder="EVM Wallet Address" required>
-
-                <button type="submit" id="submit-btn" class="w-full thunderball-submit py-5 header-font text-sm uppercase">
-                    ⚡ CAST THUNDERBOLT
-                </button>
-            </form>
-        </div>
-    </section>
-
-    <section id="page5" class="page">
-        <div class="w-full max-w-xl text-center bg-black/60 p-10 rounded-[50px] backdrop-blur-xl border-2 border-yellow-400">
-            <img src="https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png" class="w-32 mx-auto mb-6 drop-shadow-[0_0_20px_#FFEA00]">
-            <h2 class="header-font text-3xl text-yellow-400 mb-4 uppercase">Submission Success!</h2>
-            <p class="text-gray-300 mb-8">Your journey has been recorded. To increase your <span class="text-white font-bold">GTD chances</span>, share your link below!</p>
-            
-            <div class="p-6 bg-yellow-400/10 border border-dashed border-yellow-500 rounded-3xl">
-                <p id="final-link" class="text-xs font-mono text-gray-400 bg-black/40 p-3 rounded-xl mb-4 truncate"></p>
-                <button onclick="copyRef()" class="bg-yellow-400 text-black px-8 py-3 rounded-full font-black text-xs uppercase hover:scale-105 transition">Copy My Link</button>
             </div>
-
-            <p class="mt-8 text-xs text-blue-400 font-bold uppercase tracking-widest">
-                ⚡ More Referrals = Higher GTD Probability ⚡
-            </p>
         </div>
-    </section>
+
+        <div class="mining-box">
+            <p style="font-weight: 900; margin-bottom: 8px; color: #444;">ESTIMATED DAILY $PIKA REWARD</p>
+            <div class="blur-val">12,500.00 $PIKA</div>
+            <p style="font-size: 0.8rem; color: #555; margin-top: 8px;">NFT Holders can mine $PIKA by playing the Verse Game.</p>
+        </div>
+
+        <div class="btn-wrap">
+            <a href="https://opensea.io/collection/the-pika-vers/overview" target="_blank" class="btn btn-black">MINT PAGE</a>
+            <a href="https://x.com/thepikachuverse" target="_blank" class="btn btn-outline">FOLLOW ON X</a>
+        </div>
+
+        <div style="margin-top: 25px; font-size: 0.8rem; letter-spacing: 3px; font-weight: 900; color: rgba(0,0,0,0.5);">
+            MINT: MARCH 18 | SUPPLY: 999 | BASE CHAIN
+        </div>
+    </div>
 
     <script>
-        let tasks = [false, false, false, false, false];
-        function completeTask(n, url) {
-            window.open(url, '_blank');
-            tasks[n-1] = true;
-            document.getElementById(`t${n}`).classList.add('completed');
-            document.getElementById(`check${n}`).innerText = '✅';
-            if (tasks.every(t => t)) document.getElementById('next-to-final').disabled = false;
+        // Target: Today 12:00 UTC
+        const target = new Date();
+        target.setUTCHours(12, 0, 0, 0);
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = target - now;
+            if (diff > 0) {
+                document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+                document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+                document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+            }
         }
-
-        function startSequence() {
-            document.getElementById('top').classList.add('split-top');
-            document.getElementById('bottom').classList.add('split-bottom');
-            document.getElementById('center-ball').style.opacity = '0';
-            document.getElementById('flash-layer').style.animation = 'flash-anim 1s forwards';
-            setTimeout(() => nextPage(2), 800);
-        }
-
-        function nextPage(n) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page' + n).classList.add('active');
-        }
-
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbw7ieLRoWQl4dd59ioqKZeqlPYRjbFSI97IaNO1eL9E0_5qBshj2rWdpSPLsaqSEP5Yxw/exec'; 
-        const form = document.getElementById('pikaFinalForm');
-
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            const btn = document.getElementById('submit-btn');
-            btn.innerText = "TRANSMITTING...";
-            btn.disabled = true;
-
-            const user = document.getElementById('form-user').value.replace('@', '');
-            const refLink = `https://thepikaverse.art/?ref=${user}`;
-
-            fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-                .finally(() => {
-                    document.getElementById('final-link').innerText = refLink;
-                    nextPage(5);
-                });
-        });
-
-        function copyRef() {
-            navigator.clipboard.writeText(document.getElementById('final-link').innerText);
-            alert("Referral Link Copied!");
-        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
     </script>
 </body>
 </html>
