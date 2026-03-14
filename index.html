@@ -14,7 +14,7 @@
             color: black; 
             font-family: 'Outfit', sans-serif; 
             display: flex; align-items: center; justify-content: center; 
-            min-height: 100vh; margin: 0; overflow: hidden;
+            min-height: 100vh; margin: 0; overflow-y: auto; padding: 40px 0;
         }
 
         /* ব্যাকগ্রাউন্ড লাইটিং কারেন্ট ইফেক্ট */
@@ -68,6 +68,21 @@
 
         .header-text { font-family: 'Bangers', cursive; letter-spacing: 2px; color: var(--pika-yellow); }
 
+        /* টাইমার স্টাইল */
+        .timer-container {
+            background: rgba(255, 203, 5, 0.1);
+            border: 1px solid var(--pika-yellow);
+            border-radius: 15px;
+            padding: 10px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .timer-unit { text-align: center; }
+        .timer-val { display: block; font-size: 20px; font-weight: 900; color: var(--pika-yellow); }
+        .timer-label { font-size: 8px; text-transform: uppercase; color: #ccc; }
+
         /* ইনপুট বক্সের কারেন্ট বর্ডার */
         .input-container {
             position: relative;
@@ -120,6 +135,17 @@
         }
         .benefit-tag b { color: var(--pika-yellow); }
 
+        /* স্পেশাল নোটিশ */
+        .special-note {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--pika-yellow);
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 11px;
+            text-align: left;
+            color: #ddd;
+        }
+
         /* X পোস্ট বাটন */
         .x-post-btn {
             display: inline-block; margin-top: 12px; padding: 8px 15px;
@@ -148,6 +174,25 @@
         <h1 class="header-text text-5xl mb-2">CHECK YOUR SPOT</h1>
         <p class="text-[10px] text-gray-500 tracking-[0.4em] mb-4 uppercase italic">Official Pika Verse Portal</p>
 
+        <div class="timer-container">
+            <div class="timer-unit">
+                <span class="timer-val" id="days">00</span>
+                <span class="timer-label">Days</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-val" id="hours">00</span>
+                <span class="timer-label">Hours</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-val" id="minutes">00</span>
+                <span class="timer-label">Mins</span>
+            </div>
+            <div class="timer-unit">
+                <span class="timer-val" id="seconds">00</span>
+                <span class="timer-label">Secs</span>
+            </div>
+        </div>
+
         <div class="input-container">
             <input type="text" id="walletInput" placeholder="Enter Wallet Address (0x...)">
         </div>
@@ -163,8 +208,12 @@
             <div class="benefit-tag">
                 ⚡ <b>Holder Utility:</b> Your NFT is a playable character in our upcoming game. 
                 Holding increases your <b>Mining Frequency</b> to earn <b>$PIKA</b> tokens daily. 
-                Don't list your NFT; hold to evolve!
+                <b>Token Launch: March 20!</b> Minting now ensures you start mining from day one at the highest rate. Don't list; evolve!
             </div>
+        </div>
+
+        <div class="special-note">
+            <b>Note:</b> Some users see “Eligible” on the website but not on OpenSea yet. This is normal. An update will be made on March 17 and it will reflect there.
         </div>
 
         <div class="grid grid-cols-3 gap-2 mt-8 py-4 border-y border-white/10 text-[10px] font-black text-yellow-500 uppercase">
@@ -180,7 +229,30 @@
     </div>
 
     <script>
-        // আপনার Google Script URL এখানে বসাবেন
+        // Countdown Logic
+        const mintDate = new Date("March 18, 2026 14:00:00 UTC").getTime();
+
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = mintDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.querySelector(".timer-container").innerHTML = "<b style='color:#FFCB05'>MINT IS LIVE!</b>";
+            }
+        }, 1000);
+
+        // API logic
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz8FQ5KUZuQdzp8euGZEupROGEzLDMFKE-foDTVMOPnQyMbHemTnWiH26L5FFiRbluR/exec';
 
         async function checkStatus() {
@@ -210,8 +282,7 @@
                     document.getElementById('resTitle').innerText = "WL FCFS ELIGIBLE!";
                     document.getElementById('resDesc').innerText = "You are on the FCFS list. Want GTD?";
                     
-                    // WL থেকে GTD তে আপগ্রেড করার লিঙ্ক
-                    xLink.href = "https://x.com/intent/tweet?text=I%20just%20secured%20my%20WL%20spot%20in%20The%20Pika%20Verse!%20%E2%9A%A1%20Requesting%20GTD%20upgrade%20@thepikachuverse%0A%0AMint%20Date:%20March%2018%0AChain:%20Base%0ALink:%20https://opensea.io/collection/the-pika-vers/overview%0A%0AMy%20Wallet:%20[PASTE_ADDRESS]%0A%0AThePikaVerse%20Base%20NFT";
+                    xLink.href = "https://x.com/intent/tweet?text=I%20just%20secured%20my%20WL%20spot%20in%20The%20Pika%20Verse!%20%E2%9A%A1%20Requesting%20GTD%20upgrade%20@thepikachuverse%0A%0AMint%20Date:%20March%2018%0AChain:%20Base%0ALink:%20https://opensea.io/collection/the-pika-vers/overview%0A%0AMy%20Wallet:%20" + wallet + "%0A%0AThePikaVerse%20Base%20NFT";
                     xLink.innerText = "🚀 Upgrade to GTD";
                     xLink.style.display = "inline-block";
                 } else {
@@ -219,8 +290,7 @@
                     document.getElementById('resTitle').innerText = "NOT ELIGIBLE";
                     document.getElementById('resDesc').innerText = "Post about us to get a WL spot!";
                     
-                    // Not Eligible থেকে WL পাওয়ার লিঙ্ক
-                    xLink.href = "https://x.com/intent/post?text=Checking%20my%20eligibility%20for%20%40thepikachuverse.%20Can%27t%20wait%20to%20join%20the%20movement!%20%E2%9A%A1%0A%0AMint%20Date%3A%20March%2018%0AChain%3A%20Base%0ALink%3A%20https%3A%2F%2Fopensea.io%2Fcollection%2Fthe-pika-vers%2Foverview%0A%0AAdd%20me%20to%20WL%3A%20%5BPASTE_ADDRESS%5D%0A%0AThePikaVerse%20Base%20NFT%20Whitelist";
+                    xLink.href = "https://x.com/intent/post?text=Checking%20my%20eligibility%20for%20%40thepikachuverse.%20Can%27t%20wait%20to%20join%20the%20movement!%20%E2%9A%A1%0A%0AMint%20Date%3A%20March%2018%0AChain%3A%20Base%0ALink%3A%20https%3A%2F%2Fopensea.io%2Fcollection%2Fthe-pika-vers%2Foverview%0A%0AAdd%20me%20to%20WL%3A%20" + wallet + "%0A%0AThePikaVerse%20Base%20NFT%20Whitelist";
                     xLink.innerText = "⚡ Apply for WL Spot";
                     xLink.style.display = "inline-block";
                 }
