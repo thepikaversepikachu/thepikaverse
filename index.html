@@ -5,143 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PIKA PACK | Quest</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFCB05; --soft-gold: rgba(255, 203, 5, 0.1); }
-        
-        body { 
-            background: #050505; color: #fff; font-family: 'Outfit', sans-serif; 
-            margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh;
-        }
-
-        /* উন্নত ব্যাকগ্রাউন্ড ডিজাইন */
-        .bg-gradient {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 0%, #2b2200 0%, #050505 70%);
-        }
-
-        /* কার্ড ডিজাইন (অতিরিক্ত বড় নয়, কম্প্যাক্ট) */
-        .pika-card {
-            background: rgba(15, 15, 15, 0.8);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 32px; padding: 40px 25px;
-            max-width: 440px; width: 92%; text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .pika-hero {
-            width: 130px; position: absolute; top: -85px; left: 50%; transform: translateX(-50%);
-            filter: drop-shadow(0 10px 20px rgba(255, 203, 5, 0.3));
-            animation: float 3s infinite ease-in-out;
-        }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        .brand-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: 2px; color: var(--gold); }
-
-        /* মার্জিত টাস্ক বাটন */
-        .btn-task {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; padding: 14px 20px; margin-bottom: 10px;
-            display: flex; align-items: center; justify-content: space-between;
-            transition: 0.3s; cursor: pointer; font-size: 14px;
-        }
-        .btn-task:hover { border-color: var(--gold); background: var(--soft-gold); }
-        .btn-task.done { border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.05); }
-
-        /* ফ্রি মিন্ট স্টিকার */
-        .mint-badge {
-            background: linear-gradient(90deg, #FFCB05, #ff9900);
-            color: #000; font-size: 10px; font-weight: 900;
-            padding: 4px 12px; border-radius: 20px; display: inline-block;
-            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255, 203, 5, 0.4);
-        }
-
-        /* ইনপুট বক্স (মডার্ন সাইজ) */
-        .input-pika {
-            background: #000; border: 1px solid #222;
-            padding: 15px; border-radius: 14px; width: 100%; margin-bottom: 12px;
-            color: #fff; outline: none; transition: 0.3s; font-size: 14px;
-        }
+        :root { --gold: #FFCB05; }
+        body { background: #050505; color: #fff; font-family: 'Outfit', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        .bg-glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #2b2200 0%, #050505 75%); }
+        .pika-card { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 30px; padding: 40px 25px; max-width: 420px; width: 92%; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.6); position: relative; }
+        .pika-hero { width: 130px; position: absolute; top: -85px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 10px 20px rgba(255, 203, 5, 0.3)); animation: float 3s infinite ease-in-out; }
+        @keyframes float { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
+        .btn-task { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; cursor: pointer; font-size: 14px; font-weight: 600; }
+        .btn-task:hover { border-color: var(--gold); background: rgba(255, 203, 5, 0.05); }
+        .btn-task.done { border-color: #4ade80; color: #4ade80; }
+        .mint-badge { background: linear-gradient(90deg, #FFCB05, #ff9900); color: #000; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 15px; text-transform: uppercase; }
+        .input-pika { background: #000; border: 1px solid #222; padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 12px; color: #fff; outline: none; transition: 0.3s; font-size: 14px; }
         .input-pika:focus { border-color: var(--gold); }
-
-        .btn-submit {
-            background: var(--gold); color: #000; font-weight: 800;
-            width: 100%; padding: 16px; border-radius: 14px;
-            text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s;
-        }
+        .btn-submit { background: var(--gold); color: #000; font-weight: 800; width: 100%; padding: 16px; border-radius: 12px; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; }
         .btn-submit:hover { transform: scale(1.02); filter: brightness(1.1); }
-
-        /* সাকসেস সেকশন */
-        #success-view { display: none; padding: 20px 0; }
-        .follow-x-btn {
-            background: #fff; color: #000; font-weight: 800;
-            padding: 12px 25px; border-radius: 50px; display: inline-block;
-            margin-top: 20px; font-size: 13px; text-decoration: none;
-        }
+        #success-view { display: none; padding: 10px 0; }
+        .follow-x { background: #fff; color: #000; font-weight: 800; padding: 12px 25px; border-radius: 50px; display: inline-block; margin-top: 15px; font-size: 13px; text-decoration: none; transition: 0.3s; }
+        .follow-x:hover { background: var(--gold); }
     </style>
 </head>
 <body>
 
-    <div class="bg-gradient"></div>
+    <div class="bg-glow"></div>
 
     <div class="pika-card">
-        <img src="https://i.ibb.co.com/k6BXZpRL/Adobe-Express-file-11.png" class="pika-hero" alt="Pika Pack">
+        <img src="https://i.ibb.co.com/k6BXZpRL/Adobe-Express-file-11.png" class="pika-hero" alt="Pika">
         
-        <div class="mint-badge uppercase tracking-widest">FREE MINT LIVE soon</div>
-        <h1 class="brand-title text-3xl mb-1">PIKA PACK</h1>
-        <p class="text-[10px] text-gray-500 tracking-[4px] mb-8 uppercase">3333 Artifacts | Base Chain</p>
+        <div class="mint-badge">Free Mint • 3333 Supply</div>
+        <h1 style="letter-spacing: 2px;" class="text-3xl font-black text-yellow-500 mb-1">PIKA PACK</h1>
+        <p class="text-[10px] text-gray-500 tracking-[3px] mb-8 uppercase">Join the Elite Pack</p>
 
         <div id="quest-ui">
-            <div onclick="complete(1, 'https://x.com/thepikachuverse')" id="q1" class="btn-task">
-                <span>Follow @thepikachuverse</span>
-                <span id="c1">⚡</span>
+            <div onclick="task(1, 'https://x.com/thepikachuverse')" id="q1" class="btn-task">
+                <span>Follow @thepikachuverse</span> <span id="c1">⚡</span>
             </div>
-            <div onclick="complete(2, 'https://x.com/intent/retweet?tweet_id=2036316789987221673')" id="q2" class="btn-task">
-                <span>Like & Retweet Post</span>
-                <span id="c2">⚡</span>
+            <div onclick="task(2, 'https://x.com/intent/retweet?tweet_id=2036316789987221673')" id="q2" class="btn-task">
+                <span>Like & Retweet Post</span> <span id="c2">⚡</span>
             </div>
-            <div onclick="complete(3, 'https://x.com/intent/tweet?in_reply_to=2036316789987221673&text=%40friend1%20%40friend2%20%40friend3%0A%0AWallet%3A%200xYourWalletAddress')" id="q3" class="btn-task">
-                <span>Comment on Post</span>
-                <span id="c3">⚡</span>
+            <div onclick="task(3, 'https://x.com/intent/tweet?in_reply_to=2036316789987221673&text=%40friend1%20%40friend2%20%40friend3%0A%0AWallet%3A%200xYourWalletAddress')" id="q3" class="btn-task">
+                <span>Comment on Post</span> <span id="c3">⚡</span>
             </div>
         </div>
 
         <div id="form-ui" class="hidden">
             <form id="pikaForm">
-                <input type="text" id="wallet" class="input-pika" placeholder="Wallet Address (0x...)" required>
-                <input type="text" id="twitter" class="input-pika" placeholder="Twitter Username (@...)" required>
-                <input type="text" id="comment" class="input-pika" placeholder="Comment Link" required>
+                <input type="text" name="wallet" class="input-pika" placeholder="Wallet Address (0x...)" required>
+                <input type="text" name="twitter" class="input-pika" placeholder="Twitter Username (@...)" required>
+                <input type="text" name="comment" class="input-pika" placeholder="Comment Link" required>
                 <button type="submit" id="subBtn" class="btn-submit">Submit Application</button>
             </form>
         </div>
 
         <div id="success-view">
-            <div class="text-4xl mb-4">✅</div>
-            <p class="text-sm font-semibold text-gray-200 leading-relaxed px-4">
+            <div class="text-5xl mb-4">✨</div>
+            <p class="text-sm font-semibold text-gray-200 leading-relaxed">
                 "If you have submitted all information correctly, you are approved for GTD."
             </p>
-            <p class="text-[11px] text-yellow-500 mt-4 font-bold uppercase tracking-widest">Next Step:</p>
-            <a href="https://x.com/thepikachuverse" target="_blank" class="follow-x-btn">FOLLOW X FOR UPDATES</a>
+            <a href="https://x.com/thepikachuverse" target="_blank" class="follow-x">FOLLOW X FOR UPDATES</a>
         </div>
 
-        <p class="mt-8 text-[9px] text-gray-700 tracking-[3px] uppercase">thepikaverse.art | 2026</p>
+        <p class="mt-8 text-[9px] text-gray-700 tracking-[2px] uppercase">thepikaverse.art • 2026</p>
     </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRYpQxe-xnB9mzujZpk0VvgoG2W-mNfC64lPN5ip_khGSDALhf787PprcXr7XMCGDQ/exec'; 
+        // আপনার দেওয়া স্ক্রিপ্ট লিঙ্কটি এখানে আপডেট করে দেওয়া হয়েছে
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5_6_7ETHxS7fNUrtYKwPKVAp0dW0quPGMkJSX13KmCjKvIct9BnzOzgqwEPdqGdsQ/exec'; 
 
-        let status = [false, false, false];
+        let checks = [false, false, false];
 
-        function complete(n, url) {
+        function task(n, url) {
             window.open(url, '_blank');
-            status[n-1] = true;
+            checks[n-1] = true;
             document.getElementById(`q${n}`).classList.add('done');
             document.getElementById(`c${n}`).innerText = "✓";
-
-            if (status.every(s => s)) {
+            if (checks.every(c => c)) {
                 setTimeout(() => {
                     document.getElementById('quest-ui').classList.add('hidden');
                     document.getElementById('form-ui').classList.remove('hidden');
@@ -149,26 +88,25 @@
             }
         }
 
-        document.getElementById('pikaForm').addEventListener('submit', async (e) => {
+        document.getElementById('pikaForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const btn = document.getElementById('subBtn');
             btn.innerText = "SUBMITTING...";
             btn.disabled = true;
 
-            const formData = new FormData();
-            formData.append('wallet', document.getElementById('wallet').value);
-            formData.append('twitter', document.getElementById('twitter').value);
-            formData.append('comment', document.getElementById('comment').value);
-
-            try {
-                await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+            const form = e.target;
+            // No-CORS মোডে ডাটা পাঠানো হচ্ছে যাতে এরর না আসে
+            fetch(SCRIPT_URL + "?" + new URLSearchParams(new FormData(form)).toString(), {
+                method: 'POST',
+                mode: 'no-cors' 
+            }).then(() => {
                 document.getElementById('form-ui').style.display = 'none';
                 document.getElementById('success-view').style.display = 'block';
-            } catch (err) {
-                alert("Submission failed. Check your connection!");
-                btn.innerText = "Submit Application";
+            }).catch(() => {
+                alert("Critical Connection Error! Please try again.");
                 btn.disabled = false;
-            }
+                btn.innerText = "Submit Application";
+            });
         });
     </script>
 </body>
