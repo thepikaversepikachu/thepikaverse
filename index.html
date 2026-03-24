@@ -3,260 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Pika Verse | Elite Mining Hub</title>
+    <title>PIKA PACK | Quest</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;900&family=Bangers&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --pika-yellow: #FFCB05; --dark-bg: #050505; }
+        :root { --gold: #FFCB05; --soft-gold: rgba(255, 203, 5, 0.1); }
         
         body { 
-            background: radial-gradient(circle at center, #1a0b2e 0%, #000 100%); 
-            color: white; font-family: 'Outfit', sans-serif; 
-            min-height: 100vh; overflow-x: hidden;
-            display: flex; align-items: center; justify-content: center;
+            background: #050505; color: #fff; font-family: 'Outfit', sans-serif; 
+            margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh;
         }
 
-        .bangers { font-family: 'Bangers', cursive; letter-spacing: 2px; }
-
-        .electric-bg {
+        /* উন্নত ব্যাকগ্রাউন্ড ডিজাইন */
+        .bg-gradient {
             position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 203, 5, 0.2), transparent 80%);
+            background: radial-gradient(circle at 50% 0%, #2b2200 0%, #050505 70%);
         }
 
-        .glass-card {
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 203, 5, 0.2);
-            border-radius: 40px;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        /* কার্ড ডিজাইন (অতিরিক্ত বড় নয়, কম্প্যাক্ট) */
+        .pika-card {
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 32px; padding: 40px 25px;
+            max-width: 440px; width: 92%; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            position: relative;
         }
 
-        .nft-preview {
-            width: 280px; height: 280px;
-            border-radius: 20px;
-            transition: 1.5s ease-in-out;
-            filter: grayscale(100%) brightness(30%);
-            border: 4px solid #222;
+        .pika-hero {
+            width: 130px; position: absolute; top: -85px; left: 50%; transform: translateX(-50%);
+            filter: drop-shadow(0 10px 20px rgba(255, 203, 5, 0.3));
+            animation: float 3s infinite ease-in-out;
         }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        .active-session .nft-preview {
-            filter: grayscale(0%) brightness(100%);
-            border-color: var(--pika-yellow);
-            box-shadow: 0 0 40px var(--pika-yellow);
-        }
+        .brand-title { font-family: 'Space Grotesk', sans-serif; font-weight: 700; letter-spacing: 2px; color: var(--gold); }
 
-        .mine-btn {
-            width: 120px; height: 120px;
-            background: url('https://i.ibb.co.com/zHHZhH3w/Adobe-Express-file-11.png') no-repeat center;
-            background-size: 85%;
-            background-color: #111;
-            border-radius: 50%;
-            border: 4px solid #333;
-            cursor: pointer;
-            transition: 0.4s;
-        }
-
-        .mine-btn:hover { transform: scale(1.1); background-color: #222; }
-
-        .mine-btn.active {
-            background-color: var(--pika-yellow);
-            border-color: #fff;
-            box-shadow: 0 0 40px var(--pika-yellow);
-            animation: pika-pulse 2s infinite ease-in-out;
-        }
-
-        @keyframes pika-pulse { 
-            0%, 100% { transform: scale(1); filter: brightness(1); } 
-            50% { transform: scale(1.1); filter: brightness(1.3); } 
-        }
-
-        /* শুধুমাত্র মূল্যের জন্য ব্লার */
-        .stealth-blur {
-            filter: blur(15px);
-            background: rgba(255, 203, 5, 0.15);
-            padding: 2px 10px;
-            border-radius: 8px;
-            user-select: none;
-            pointer-events: none;
-        }
-
-        .round-icon {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.3s; background: rgba(255,255,255,0.05);
-        }
-        .round-icon img { width: 20px; }
-        .round-icon:hover { background: var(--pika-yellow); transform: translateY(-3px); }
-
-        .tokenomics-card {
+        /* মার্জিত টাস্ক বাটন */
+        .btn-task {
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 203, 5, 0.1);
-            border-radius: 20px;
-            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 14px 20px; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: 0.3s; cursor: pointer; font-size: 14px;
+        }
+        .btn-task:hover { border-color: var(--gold); background: var(--soft-gold); }
+        .btn-task.done { border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.05); }
+
+        /* ফ্রি মিন্ট স্টিকার */
+        .mint-badge {
+            background: linear-gradient(90deg, #FFCB05, #ff9900);
+            color: #000; font-size: 10px; font-weight: 900;
+            padding: 4px 12px; border-radius: 20px; display: inline-block;
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(255, 203, 5, 0.4);
+        }
+
+        /* ইনপুট বক্স (মডার্ন সাইজ) */
+        .input-pika {
+            background: #000; border: 1px solid #222;
+            padding: 15px; border-radius: 14px; width: 100%; margin-bottom: 12px;
+            color: #fff; outline: none; transition: 0.3s; font-size: 14px;
+        }
+        .input-pika:focus { border-color: var(--gold); }
+
+        .btn-submit {
+            background: var(--gold); color: #000; font-weight: 800;
+            width: 100%; padding: 16px; border-radius: 14px;
+            text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s;
+        }
+        .btn-submit:hover { transform: scale(1.02); filter: brightness(1.1); }
+
+        /* সাকসেস সেকশন */
+        #success-view { display: none; padding: 20px 0; }
+        .follow-x-btn {
+            background: #fff; color: #000; font-weight: 800;
+            padding: 12px 25px; border-radius: 50px; display: inline-block;
+            margin-top: 20px; font-size: 13px; text-decoration: none;
         }
     </style>
 </head>
-<body class="p-4 md:p-10">
+<body>
 
-    <div class="electric-bg"></div>
+    <div class="bg-gradient"></div>
 
-    <div class="glass-card w-full max-w-6xl p-6 md:p-12 relative overflow-hidden" id="mainWrapper">
+    <div class="pika-card">
+        <img src="https://i.ibb.co.com/k6BXZpRL/Adobe-Express-file-11.png" class="pika-hero" alt="Pika Pack">
         
-        <div class="text-center mb-10">
-            <h1 class="bangers text-5xl md:text-7xl text-yellow-400">PIKA MINING PORTAL</h1>
-            <p class="text-[10px] tracking-[0.4em] text-cyan-400 uppercase font-black mb-4 italic">Exclusive for Pika Verse Holders</p>
-            
-            <div class="flex justify-center gap-4 mb-6">
-                <a href="https://x.com/thepikachuverse" target="_blank" class="round-icon"><img src="https://cdn-icons-png.flaticon.com/512/733/733579.png" alt="X"></a>
-                <a href="https://opensea.io/collection/the-pika-vers/overview" target="_blank" class="round-icon"><img src="https://pageflows.com/media/logos/opensea.png" alt="OS"></a>
-                <a href="https://discord.gg/p8xcjcVf" target="_blank" class="round-icon"><img src="https://cdn-icons-png.flaticon.com/512/5968/5968756.png" alt="Discord"></a>
+        <div class="mint-badge uppercase tracking-widest">FREE MINT LIVE soon</div>
+        <h1 class="brand-title text-3xl mb-1">PIKA PACK</h1>
+        <p class="text-[10px] text-gray-500 tracking-[4px] mb-8 uppercase">3333 Artifacts | Base Chain</p>
+
+        <div id="quest-ui">
+            <div onclick="complete(1, 'https://x.com/thepikachuverse')" id="q1" class="btn-task">
+                <span>Follow @thepikachuverse</span>
+                <span id="c1">⚡</span>
             </div>
-
-            <div class="bg-yellow-500/10 border border-yellow-400/30 px-6 py-2 rounded-full inline-block">
-                <p class="text-yellow-400 font-bold text-[10px] uppercase italic">⚡ Token Launch: March 20 @ 14:00 UTC via @bankrbot</p>
+            <div onclick="complete(2, 'https://x.com/intent/retweet?tweet_id=2036316789987221673')" id="q2" class="btn-task">
+                <span>Like & Retweet Post</span>
+                <span id="c2">⚡</span>
             </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
-            <div class="flex flex-col items-center space-y-8">
-                <div class="relative">
-                    <img id="nftImage" src="https://i2c.seadn.io/collection/the-pika-vers/image_type_preview_media/68b94efc21150fb19d4db70bfedef0/3668b94efc21150fb19d4db70bfedef0.jpeg?w=1080" 
-                         class="nft-preview w-64 h-64 md:w-80 md:h-80 object-cover" alt="Pika NFT">
-                    <div id="statusTag" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/90 px-5 py-1 rounded-full text-[10px] font-black uppercase text-red-500 border border-red-500/30">Offline</div>
-                </div>
-
-                <div class="w-full max-w-sm space-y-4">
-                    <input type="text" id="walletInput" placeholder="Paste Base Wallet (0x...)" 
-                           class="w-full bg-black/80 border border-yellow-500/20 p-4 rounded-2xl text-center outline-none focus:border-yellow-500 text-sm text-white font-bold transition">
-                    
-                    <div class="flex flex-col items-center">
-                        <div id="pikaBtn" onclick="strictVerify()" class="mine-btn"></div>
-                        <p id="mineMsg" class="text-[10px] mt-3 font-black text-gray-500 uppercase tracking-widest">Verify & Power Up</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="space-y-6">
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
-                        <p class="text-[10px] text-gray-500 font-black uppercase mb-1">Daily Reward</p>
-                        <h2 class="text-2xl font-black text-yellow-400">1,5000 <span class="text-xs font-black">$PIKA</span></h2>
-                        <p class="text-[9px] text-gray-600 mt-1 italic">Value: <span class="stealth-blur">$0.70</span></p>
-                    </div>
-                    <div class="bg-white/5 p-6 rounded-3xl border border-white/5">
-                        <p class="text-[10px] text-gray-500 font-black uppercase mb-1">Target Value</p>
-                        <h2 class="text-2xl font-black text-white">$<span class="stealth-blur">1.00</span></h2>
-                        <p class="text-[9px] text-gray-600 mt-1 italic">Market Projection</p>
-                    </div>
-                </div>
-
-                <div class="bg-yellow-500/5 p-8 rounded-3xl border border-yellow-400/10">
-                    <h3 class="bangers text-3xl text-yellow-500 mb-4 uppercase">Project Ecosystem</h3>
-                    <div class="grid grid-cols-2 gap-4 mb-6">
-                        <div class="tokenomics-card text-center">
-                            <p class="text-[9px] text-gray-500 uppercase">Total Supply</p>
-                            <p class="text-sm font-black">100B</p>
-                        </div>
-                        <div class="tokenomics-card text-center">
-                            <p class="text-[9px] text-gray-500 uppercase">Mining Pool</p>
-                            <p class="text-sm font-black text-yellow-400">60% (6M)</p>
-                        </div>
-                        <div class="tokenomics-card text-center">
-                            <p class="text-[9px] text-gray-500 uppercase">Liquidity</p>
-                            <p class="text-sm font-black">30% (3M)</p>
-                        </div>
-                        <div class="tokenomics-card text-center">
-                            <p class="text-[9px] text-gray-500 uppercase">Team</p>
-                            <p class="text-sm font-black">10% (1M)</p>
-                        </div>
-                    </div>
-                    <ul class="text-xs space-y-4 text-gray-400 leading-relaxed font-bold">
-                        <li>• <span class="text-white">POWER SCALING:</span> Each additional NFT held in your wallet multiplies your Mining Power.</li>
-                        <li>• <span class="text-white">SECURE DISTRIBUTION:</span> Verified holders receive $PIKA rewards every 24 hours.</li>
-                    </ul>
-                </div>
-
-                <div class="bg-black/40 p-6 rounded-3xl border border-white/5 relative overflow-hidden">
-                    <h3 class="text-xs font-black mb-4 uppercase text-gray-600 tracking-widest">Global Miner Leaderboard</h3>
-                    <div id="leaderboardContent" class="space-y-3">
-                        <div class="flex justify-between items-center text-[10px] border-b border-white/5 pb-2">
-                            <span class="text-gray-400">1. 0x83...c221 (Vault)</span>
-                            <span class="text-yellow-500 font-black">Waiting for Launch...</span>
-                        </div>
-                        <p class="text-[9px] text-center text-gray-500 mt-2 uppercase">Verified data will sync instantly on March 20</p>
-                    </div>
-                </div>
-
-                <a href="https://opensea.io/collection/the-pika-vers/overview" target="_blank" 
-                   class="block w-full bg-yellow-400 text-black text-center font-black py-4 rounded-2xl text-xs uppercase hover:bg-white transition-all duration-500">
-                    ⚡ Mint on OpenSea to Maximize Mining Power
-                </a>
+            <div onclick="complete(3, 'https://x.com/intent/tweet?in_reply_to=2036316789987221673&text=%40friend1%20%40friend2%20%40friend3%0A%0AWallet%3A%200xYourWalletAddress')" id="q3" class="btn-task">
+                <span>Comment on Post</span>
+                <span id="c3">⚡</span>
             </div>
         </div>
+
+        <div id="form-ui" class="hidden">
+            <form id="pikaForm">
+                <input type="text" id="wallet" class="input-pika" placeholder="Wallet Address (0x...)" required>
+                <input type="text" id="twitter" class="input-pika" placeholder="Twitter Username (@...)" required>
+                <input type="text" id="comment" class="input-pika" placeholder="Comment Link" required>
+                <button type="submit" id="subBtn" class="btn-submit">Submit Application</button>
+            </form>
+        </div>
+
+        <div id="success-view">
+            <div class="text-4xl mb-4">✅</div>
+            <p class="text-sm font-semibold text-gray-200 leading-relaxed px-4">
+                "If you have submitted all information correctly, you are approved for GTD."
+            </p>
+            <p class="text-[11px] text-yellow-500 mt-4 font-bold uppercase tracking-widest">Next Step:</p>
+            <a href="https://x.com/thepikachuverse" target="_blank" class="follow-x-btn">FOLLOW X FOR UPDATES</a>
+        </div>
+
+        <p class="mt-8 text-[9px] text-gray-700 tracking-[3px] uppercase">thepikaverse.art | 2026</p>
     </div>
 
     <script>
-        const ALCHEMY_KEY = "YuYikKDJy5xWXCUSql_nr"; 
-        const PIKA_CONTRACT = "0x83E3E9ACCB1d2d04a065e25dBc4A6c121A80C221";
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwh1H7LQUk6HExQhA2CQcQB3FKr3AFVFgvp-8YtXzM4OWqsG1zZvcW_MaSJ_f0JgeDurg/exec"; 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwRYpQxe-xnB9mzujZpk0VvgoG2W-mNfC64lPN5ip_khGSDALhf787PprcXr7XMCGDQ/exec'; 
 
-        async function strictVerify() {
-            const wallet = document.getElementById('walletInput').value.trim().toLowerCase();
-            const msg = document.getElementById('mineMsg');
-            const btn = document.getElementById('pikaBtn');
-            const status = document.getElementById('statusTag');
-            const wrapper = document.getElementById('mainWrapper');
+        let status = [false, false, false];
 
-            if (wallet.length < 42) {
-                alert("Error: Please provide a valid Base Wallet Address!");
-                return;
+        function complete(n, url) {
+            window.open(url, '_blank');
+            status[n-1] = true;
+            document.getElementById(`q${n}`).classList.add('done');
+            document.getElementById(`c${n}`).innerText = "✓";
+
+            if (status.every(s => s)) {
+                setTimeout(() => {
+                    document.getElementById('quest-ui').classList.add('hidden');
+                    document.getElementById('form-ui').classList.remove('hidden');
+                }, 500);
             }
+        }
 
-            msg.innerText = "CHECKING NFT HOLDINGS...";
-            msg.style.color = "#00E5FF";
+        document.getElementById('pikaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('subBtn');
+            btn.innerText = "SUBMITTING...";
+            btn.disabled = true;
 
-            const url = `https://base-mainnet.g.alchemy.com/nft/v3/${ALCHEMY_KEY}/getNFTsForOwner?owner=${wallet}&contractAddresses[]=${PIKA_CONTRACT}&withMetadata=false`;
+            const formData = new FormData();
+            formData.append('wallet', document.getElementById('wallet').value);
+            formData.append('twitter', document.getElementById('twitter').value);
+            formData.append('comment', document.getElementById('comment').value);
 
             try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                if (!data.ownedNfts || data.ownedNfts.length === 0) {
-                    throw new Error("NOT_A_HOLDER");
-                }
-
-                sendToGoogleSheet(wallet, data.ownedNfts.length);
-
-                wrapper.classList.add('active-session');
-                btn.classList.add('active');
-                status.innerText = "Mining Active";
-                status.style.color = "#22c55e";
-                msg.innerText = "MINING IN PROGRESS (1500 $PIKA/DAY)";
-                msg.style.color = "#FFCB05";
-
+                await fetch(SCRIPT_URL, { method: 'POST', body: formData });
+                document.getElementById('form-ui').style.display = 'none';
+                document.getElementById('success-view').style.display = 'block';
             } catch (err) {
-                btn.classList.remove('active');
-                msg.innerText = "ACCESS DENIED: NO NFT FOUND";
-                msg.style.color = "#ef4444";
-                alert("Access Denied: You must hold an NFT to start mining.");
+                alert("Submission failed. Check your connection!");
+                btn.innerText = "Submit Application";
+                btn.disabled = false;
             }
-        }
-
-        function sendToGoogleSheet(wallet, nftCount) {
-            if(!SCRIPT_URL || SCRIPT_URL.includes("YOUR_GOOGLE")) return;
-            const formData = new URLSearchParams();
-            formData.append('wallet', wallet);
-            formData.append('nfts', nftCount);
-            formData.append('time', new Date().toLocaleString());
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: formData
-            });
-        }
+        });
     </script>
 </body>
 </html>
