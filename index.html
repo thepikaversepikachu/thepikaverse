@@ -41,11 +41,14 @@
             <div onclick="task(1, 'https://x.com/intent/follow?screen_name=thepikachuverse')" id="q1" class="btn-task">
                 <span>Follow @thepikachuverse</span> <span id="c1">⚡</span>
             </div>
-            <div onclick="task(2, 'https://x.com/intent/retweet?tweet_id=2036433278606123306')" id="q2" class="btn-task">
-                <span>Like & Retweet Post</span> <span id="c2">⚡</span>
+            <div onclick="task(2, 'https://x.com/intent/follow?screen_name=ashketchumverse')" id="q2" class="btn-task">
+                <span>Follow Builder @ashketchumverse</span> <span id="c2">⚡</span>
             </div>
-            <div onclick="task(3, 'https://x.com/intent/tweet?in_reply_to=2036433278606123306&text=%40friend1%20%40friend2%20%40friend3%0A%0AWallet%3A%200xYourWalletAddress')" id="q3" class="btn-task">
-                <span>Comment on Post</span> <span id="c3">⚡</span>
+            <div onclick="task(3, 'https://x.com/intent/retweet?tweet_id=2036682651537707076')" id="q3" class="btn-task">
+                <span>Like & Retweet Post</span> <span id="c3">⚡</span>
+            </div>
+            <div onclick="task(4, 'https://x.com/intent/tweet?in_reply_to=2036682651537707076&text=%40friend1%20%40friend2%20%40friend3%0A%0AWallet%3A%200xYourWalletAddress')" id="q4" class="btn-task">
+                <span>Comment on Post</span> <span id="c4">⚡</span>
             </div>
         </div>
 
@@ -70,10 +73,10 @@
     </div>
 
     <script>
-        // আপনার দেওয়া স্ক্রিপ্ট লিঙ্কটি এখানে আপডেট করে দেওয়া হয়েছে
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5_6_7ETHxS7fNUrtYKwPKVAp0dW0quPGMkJSX13KmCjKvIct9BnzOzgqwEPdqGdsQ/exec'; 
 
-        let checks = [false, false, false];
+        // এখন মোট ৪টি টাস্ক আছে, তাই ৪টি false করা হয়েছে
+        let checks = [false, false, false, false];
 
         function task(n, url) {
             window.open(url, '_blank');
@@ -95,7 +98,6 @@
             btn.disabled = true;
 
             const form = e.target;
-            // No-CORS মোডে ডাটা পাঠানো হচ্ছে যাতে এরর না আসে
             fetch(SCRIPT_URL + "?" + new URLSearchParams(new FormData(form)).toString(), {
                 method: 'POST',
                 mode: 'no-cors' 
