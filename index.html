@@ -3,113 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIKA PACK | Quest</title>
+    <title>PIKA TCG | Official Portal</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: #FFCB05; }
-        body { background: #050505; color: #fff; font-family: 'Outfit', sans-serif; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
-        .bg-glow { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 0%, #2b2200 0%, #050505 75%); }
-        .pika-card { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 30px; padding: 40px 25px; max-width: 420px; width: 92%; text-align: center; box-shadow: 0 30px 60px rgba(0,0,0,0.6); position: relative; }
-        .pika-hero { width: 130px; position: absolute; top: -85px; left: 50%; transform: translateX(-50%); filter: drop-shadow(0 10px 20px rgba(255, 203, 5, 0.3)); animation: float 3s infinite ease-in-out; }
-        @keyframes float { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, -10px); } }
-        .btn-task { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 15px; padding: 14px 18px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; cursor: pointer; font-size: 14px; font-weight: 600; }
-        .btn-task:hover { border-color: var(--gold); background: rgba(255, 203, 5, 0.05); }
-        .btn-task.done { border-color: #4ade80; color: #4ade80; }
-        .mint-badge { background: linear-gradient(90deg, #FFCB05, #ff9900); color: #000; font-size: 10px; font-weight: 900; padding: 4px 12px; border-radius: 20px; display: inline-block; margin-bottom: 15px; text-transform: uppercase; }
-        .input-pika { background: #000; border: 1px solid #222; padding: 15px; border-radius: 12px; width: 100%; margin-bottom: 12px; color: #fff; outline: none; transition: 0.3s; font-size: 14px; }
-        .input-pika:focus { border-color: var(--gold); }
-        .btn-submit { background: var(--gold); color: #000; font-weight: 800; width: 100%; padding: 16px; border-radius: 12px; text-transform: uppercase; cursor: pointer; border: none; transition: 0.3s; }
-        .btn-submit:hover { transform: scale(1.02); filter: brightness(1.1); }
-        #success-view { display: none; padding: 10px 0; }
-        .follow-x { background: #fff; color: #000; font-weight: 800; padding: 12px 25px; border-radius: 50px; display: inline-block; margin-top: 15px; font-size: 13px; text-decoration: none; transition: 0.3s; }
-        .follow-x:hover { background: var(--gold); }
+        :root { --pika-gold: #FFCB05; }
+        body { 
+            background: #000; color: #fff; font-family: 'Outfit', sans-serif; 
+            margin: 0; min-height: 100vh; overflow-y: auto;
+        }
+        
+        .bg-glow {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #221d00 0%, #000 100%);
+        }
+
+        .header { position: absolute; top: 25px; right: 25px; z-index: 100; }
+        .btn-connect {
+            background: rgba(255, 203, 5, 0.1); border: 1.5px solid var(--pika-gold);
+            color: var(--pika-gold); font-weight: 900; padding: 12px 24px;
+            border-radius: 8px; font-size: 11px; letter-spacing: 1px;
+            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        }
+
+        .main-stage { padding-top: 80px; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+
+        .pack-anchor { 
+            width: 250px; height: 360px; position: relative; 
+            cursor: pointer; z-index: 50; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .pack-visual { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 203, 5, 0.3)); z-index: 60; }
+
+        .reveal-card {
+            width: 230px; 
+            height: 320px; 
+            background-image: url('https://i.ibb.co.com/236TgN9p/20260324-110430.jpg');
+            background-size: 100% 100%; 
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 14px; border: 3px solid #fff;
+            position: absolute; 
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.5); 
+            opacity: 0; 
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
+            z-index: 70; 
+            pointer-events: none;
+        }
+
+        .gtd-notice {
+            max-width: 500px; text-align: center; background: rgba(255, 203, 5, 0.05);
+            border: 1px solid rgba(255, 203, 5, 0.2); padding: 15px; border-radius: 10px;
+            margin-bottom: 30px; margin-top: 10px;
+        }
+
+        .footer-nav { display: flex; gap: 15px; margin-top: 20px; }
+        .btn-luxury {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff; font-weight: 800; padding: 12px 25px; border-radius: 10px;
+            font-size: 11px; text-transform: uppercase; transition: 0.3s;
+        }
+
+        #launch-msg {
+            display: none; position: fixed; top: 85px; right: 25px;
+            background: #000; border: 1px solid var(--pika-gold);
+            padding: 15px; border-radius: 8px; z-index: 200; font-size: 11px;
+            max-width: 300px; text-align: center; line-height: 1.4;
+        }
     </style>
 </head>
 <body>
 
     <div class="bg-glow"></div>
 
-    <div class="pika-card">
-        <img src="https://i.ibb.co.com/k6BXZpRL/Adobe-Express-file-11.png" class="pika-hero" alt="Pika">
-        
-        <div class="mint-badge">Free Mint • 3333 Supply</div>
-        <h1 style="letter-spacing: 2px;" class="text-3xl font-black text-yellow-500 mb-1">PIKA PACK</h1>
-        <p class="text-[10px] text-gray-500 tracking-[3px] mb-8 uppercase">Join the Elite Pack</p>
-
-        <div id="quest-ui">
-            <div onclick="task(1, 'https://x.com/intent/follow?screen_name=thepikachuverse')" id="q1" class="btn-task">
-                <span>Follow @thepikachuverse</span> <span id="c1">⚡</span>
-            </div>
-            <div onclick="task(2, 'https://x.com/intent/follow?screen_name=ashketchumverse')" id="q2" class="btn-task">
-                <span>Follow Builder @ashketchumverse</span> <span id="c2">⚡</span>
-            </div>
-            <div onclick="task(3, 'https://x.com/intent/retweet?tweet_id=2036682651537707076')" id="q3" class="btn-task">
-                <span>Like & Retweet Post</span> <span id="c3">⚡</span>
-            </div>
-            <div onclick="task(4, 'https://x.com/intent/tweet?in_reply_to=2036682651537707076&text=%40friend1%20%40friend2%20%40friend3%0A%0AWallet%3A%200xYourWalletAddress')" id="q4" class="btn-task">
-                <span>Comment on Post</span> <span id="c4">⚡</span>
-            </div>
-        </div>
-
-        <div id="form-ui" class="hidden">
-            <form id="pikaForm">
-                <input type="text" name="wallet" class="input-pika" placeholder="Wallet Address (0x...)" required>
-                <input type="text" name="twitter" class="input-pika" placeholder="Twitter Username (@...)" required>
-                <input type="text" name="comment" class="input-pika" placeholder="Comment Link" required>
-                <button type="submit" id="subBtn" class="btn-submit">Submit Application</button>
-            </form>
-        </div>
-
-        <div id="success-view">
-            <div class="text-5xl mb-4">✨</div>
-            <p class="text-sm font-semibold text-gray-200 leading-relaxed">
-                "If you have submitted all information correctly, you are approved for GTD."
-            </p>
-            <a href="https://x.com/thepikachuverse" target="_blank" class="follow-x">FOLLOW X FOR UPDATES</a>
-        </div>
-
-        <p class="mt-8 text-[9px] text-gray-700 tracking-[2px] uppercase">thepikaverse.art • 2026</p>
+    <div class="header">
+        <button class="btn-connect" onclick="showPopup()">Connect Wallet</button>
+        <div id="launch-msg"></div>
     </div>
 
+    <div class="main-stage">
+        <h1 style="font-family: 'Syncopate';" class="text-[9px] tracking-[10px] text-gray-500 mb-12 uppercase text-center">Pika TCG Terminal</h1>
+
+        <div class="pack-anchor" id="packBox" onclick="startOpening()">
+            <img src="https://i.ibb.co.com/9mmdpxkV/Adobe-Express-file-11.png" class="pack-visual" id="pikaPack">
+            <div id="pikaCard" class="reveal-card"></div>
+        </div>
+
+        <div class="gtd-notice">
+            <p class="text-[11px] leading-relaxed text-gray-300">
+                <strong class="text-yellow-500 uppercase tracking-widest">GTD Eligibility Update:</strong><br>
+                All wallet addresses will be added to OpenSea before <span class="text-white">March 27, 10:00 UTC</span>. 
+                After that, users can check their wallet addresses to verify their eligibility.
+            </p>
+        </div>
+
+        <div class="footer-nav">
+            <a href="https://x.com/intent/follow?screen_name=thepikachuverse" target="_blank" class="btn-luxury">Follow on X</a>
+            <a href="https://opensea.io/collection/pika-tcg-pack/overview" target="_blank" class="btn-luxury" style="border-color: #2081E2;">Mint on OpenSea</a>
+        </div>
+
+        <p class="mt-10 text-[7px] text-gray-700 tracking-[8px] uppercase">thepikaverse.art // encrypted</p>
+    </div>
+
+    <audio id="ripSound" src="https://www.soundjay.com/misc/sounds/paper-rip-1.mp3" preload="auto"></audio>
+    <audio id="revealSound" src="https://www.soundjay.com/magic/magic-chime-01.mp3" preload="auto"></audio>
+
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw5_6_7ETHxS7fNUrtYKwPKVAp0dW0quPGMkJSX13KmCjKvIct9BnzOzgqwEPdqGdsQ/exec'; 
+        let isRevealed = false;
 
-        // এখন মোট ৪টি টাস্ক আছে, তাই ৪টি false করা হয়েছে
-        let checks = [false, false, false, false];
-
-        function task(n, url) {
-            window.open(url, '_blank');
-            checks[n-1] = true;
-            document.getElementById(`q${n}`).classList.add('done');
-            document.getElementById(`c${n}`).innerText = "✓";
-            if (checks.every(c => c)) {
-                setTimeout(() => {
-                    document.getElementById('quest-ui').classList.add('hidden');
-                    document.getElementById('form-ui').classList.remove('hidden');
-                }, 500);
-            }
+        function startOpening() {
+            if(isRevealed) return;
+            isRevealed = true;
+            document.getElementById('ripSound').play();
+            const tl = gsap.timeline();
+            tl.to("#packBox", { duration: 0.05, x: 5, repeat: 10, yoyo: true });
+            tl.to("#pikaPack", { duration: 0.5, scale: 1.4, opacity: 0, filter: "brightness(3) blur(10px)", ease: "power2.in" });
+            tl.to("#pikaCard", {
+                duration: 1.2, opacity: 1, scale: 1, y: 0, ease: "back.out(1.4)",
+                boxShadow: "0 0 80px rgba(255, 203, 5, 0.4)",
+                onStart: () => { document.getElementById('revealSound').play(); }
+            }, "-=0.2");
         }
 
-        document.getElementById('pikaForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('subBtn');
-            btn.innerText = "SUBMITTING...";
-            btn.disabled = true;
-
-            const form = e.target;
-            fetch(SCRIPT_URL + "?" + new URLSearchParams(new FormData(form)).toString(), {
-                method: 'POST',
-                mode: 'no-cors' 
-            }).then(() => {
-                document.getElementById('form-ui').style.display = 'none';
-                document.getElementById('success-view').style.display = 'block';
-            }).catch(() => {
-                alert("Critical Connection Error! Please try again.");
-                btn.disabled = false;
-                btn.innerText = "Submit Application";
-            });
-        });
+        function showPopup() {
+            const msg = document.getElementById('launch-msg');
+            msg.innerText = "On MARCH 28, 16:00 UTC, users can connect their wallets to open their TCG packs.";
+            msg.style.display = 'block';
+            gsap.fromTo(msg, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4 });
+            setTimeout(() => { 
+                gsap.to(msg, { opacity: 0, duration: 0.4, onComplete: () => msg.style.display = 'none' });
+            }, 5000);
+        }
     </script>
 </body>
 </html>
