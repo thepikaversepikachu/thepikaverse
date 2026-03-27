@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIKA TCG | Official Portal</title>
+    <title>PIKA TCG PACK Official</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
     <style>
         :root { --pika-gold: #FFCB05; }
         body { 
             background: #000; color: #fff; font-family: 'Outfit', sans-serif; 
-            margin: 0; min-height: 100vh; overflow-y: auto;
+            margin: 0; min-height: 100vh; overflow-x: hidden;
         }
         
         .bg-glow {
@@ -27,50 +28,65 @@
             text-transform: uppercase; cursor: pointer; transition: 0.3s;
         }
 
-        .main-stage { padding-top: 80px; padding-bottom: 80px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .main-stage { padding-top: 80px; padding-bottom: 60px; display: flex; flex-direction: column; align-items: center; }
 
-        .pack-anchor { 
-            width: 250px; height: 360px; position: relative; 
-            cursor: pointer; z-index: 50; margin-bottom: 20px;
-            display: flex; align-items: center; justify-content: center;
+        /* Pack Slider Styles */
+        .slider-container {
+            width: 100%; max-width: 500px; overflow-x: auto; 
+            display: flex; gap: 40px; padding: 40px 20px;
+            scroll-snap-type: x mandatory; scrollbar-width: none;
         }
-        .pack-visual { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 15px rgba(255, 203, 5, 0.3)); z-index: 60; }
+        .slider-container::-webkit-scrollbar { display: none; }
 
-        .reveal-card {
-            width: 230px; 
-            height: 320px; 
-            background-image: url('https://i.ibb.co.com/236TgN9p/20260324-110430.jpg');
-            background-size: 100% 100%; 
-            background-repeat: no-repeat;
-            background-position: center;
-            border-radius: 14px; border: 3px solid #fff;
-            position: absolute; 
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.5); 
-            opacity: 0; 
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.2);
-            z-index: 70; 
-            pointer-events: none;
+        .pack-card {
+            min-width: 250px; flex-shrink: 0; scroll-snap-align: center;
+            display: flex; flex-direction: column; align-items: center;
+            transition: transform 0.4s; cursor: pointer;
+        }
+        .pack-card:hover { transform: scale(1.05); }
+        .pack-img { width: 100%; height: 350px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 203, 5, 0.2)); }
+        .pack-name { margin-top: 15px; font-weight: 900; color: var(--pika-gold); letter-spacing: 3px; font-size: 14px; text-transform: uppercase; }
+
+        /* Eligibility and Refund Box */
+        .eligibility-box {
+            width: 90%; max-width: 420px; margin-top: 20px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 203, 5, 0.2);
+            border-radius: 20px; padding: 25px; text-align: center;
+        }
+        .search-container {
+            background: #111; border: 1px solid #333;
+            border-radius: 12px; padding: 5px; display: flex; gap: 8px; margin-top: 15px;
+        }
+        .search-input {
+            background: transparent; border: none; color: #fff; flex: 1;
+            padding: 10px; font-size: 13px; outline: none;
+        }
+        .btn-search {
+            background: var(--pika-gold); color: #000; font-weight: 900;
+            padding: 0 20px; border-radius: 8px; font-size: 11px; text-transform: uppercase;
         }
 
-        .gtd-notice {
-            max-width: 500px; text-align: center; background: rgba(255, 203, 5, 0.05);
-            border: 1px solid rgba(255, 203, 5, 0.2); padding: 15px; border-radius: 10px;
-            margin-bottom: 30px; margin-top: 10px;
+        .btn-claim-fee {
+            background: linear-gradient(45deg, #FFCB05, #B8860B);
+            color: #000; font-weight: 900; padding: 18px;
+            border-radius: 15px; font-size: 15px; letter-spacing: 1px;
+            text-transform: uppercase; border: none; cursor: pointer;
+            box-shadow: 0 0 30px rgba(255, 203, 5, 0.3);
+            transition: 0.4s; width: 90%; max-width: 420px; margin: 25px 0;
         }
 
-        .footer-nav { display: flex; gap: 15px; margin-top: 20px; }
-        .btn-luxury {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff; font-weight: 800; padding: 12px 25px; border-radius: 10px;
-            font-size: 11px; text-transform: uppercase; transition: 0.3s;
+        .security-notice-v3 {
+            max-width: 420px; width: 90%; background: rgba(255, 203, 5, 0.05);
+            border: 1px dashed var(--pika-gold); padding: 20px; border-radius: 12px;
+            margin-bottom: 40px;
         }
 
-        #launch-msg {
-            display: none; position: fixed; top: 85px; right: 25px;
-            background: #000; border: 1px solid var(--pika-gold);
-            padding: 15px; border-radius: 8px; z-index: 200; font-size: 11px;
-            max-width: 300px; text-align: center; line-height: 1.4;
+        #center-popup {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); background: #000;
+            border: 2px solid var(--pika-gold); padding: 35px;
+            border-radius: 24px; z-index: 1000; text-align: center;
+            width: 90%; max-width: 480px; box-shadow: 0 0 100px rgba(0, 0, 0, 1);
         }
     </style>
 </head>
@@ -78,64 +94,127 @@
 
     <div class="bg-glow"></div>
 
+    <div id="center-popup">
+        <div id="popup-icon" class="text-yellow-500 text-4xl mb-4"></div>
+        <p id="popup-text" class="text-white font-bold text-lg uppercase tracking-wider"></p>
+        <button onclick="closeCenterPopup()" class="mt-8 text-[11px] text-zinc-500 tracking-[4px] uppercase border-t border-zinc-800 pt-5 w-full">Back</button>
+    </div>
+
     <div class="header">
-        <button class="btn-connect" onclick="showPopup()">Connect Wallet</button>
-        <div id="launch-msg"></div>
+        <button id="walletBtn" class="btn-connect" onclick="connectWallet()">Connect Wallet</button>
     </div>
 
     <div class="main-stage">
-        <h1 style="font-family: 'Syncopate';" class="text-[9px] tracking-[10px] text-gray-500 mb-12 uppercase text-center">Pika TCG Terminal</h1>
+        <h1 style="font-family: 'Syncopate';" class="text-[9px] tracking-[10px] text-gray-500 mb-4 uppercase">Pika TCG PACK</h1>
+        <p class="text-[9px] text-zinc-600 uppercase tracking-[3px] mb-2">Swipe to explore packs</p>
 
-        <div class="pack-anchor" id="packBox" onclick="startOpening()">
-            <img src="https://i.ibb.co.com/9mmdpxkV/Adobe-Express-file-11.png" class="pack-visual" id="pikaPack">
-            <div id="pikaCard" class="reveal-card"></div>
+        <div class="slider-container">
+            <div class="pack-card" onclick="showPackNotice('Common')">
+                <img src="https://i.ibb.co.com/35Wf5f9N/1000020168-Picsart-Background-Remover.png" class="pack-img">
+                <span class="pack-name">Common Pack</span>
+            </div>
+            <div class="pack-card" onclick="showPackNotice('Rare')">
+                <img src="https://i.ibb.co.com/FqmTsm7g/1000020206-Photoroom.png" class="pack-img">
+                <span class="pack-name">Rare Pack</span>
+            </div>
+            <div class="pack-card" onclick="showPackNotice('Epic')">
+                <img src="https://i.ibb.co.com/ZpHt8GZ6/1000020202-Photoroom.png" class="pack-img">
+                <span class="pack-name">Epic Pack</span>
+            </div>
+            <div class="pack-card" onclick="showPackNotice('Legendary')">
+                <img src="https://i.ibb.co.com/9mmdpxkV/Adobe-Express-file-11.png" class="pack-img">
+                <span class="pack-name">Legendary Pack</span>
+            </div>
         </div>
 
-        <div class="gtd-notice">
-            <p class="text-[11px] leading-relaxed text-gray-300">
-                <strong class="text-yellow-500 uppercase tracking-widest">GTD Eligibility Update:</strong><br>
-                All wallet addresses will be added to OpenSea before <span class="text-white">March 27, 10:00 UTC</span>. 
-                After that, users can check their wallet addresses to verify their eligibility.
+        <div class="eligibility-box">
+            <h3 class="text-white font-black text-sm tracking-widest uppercase mb-1">Check Refund Eligibility</h3>
+            <p class="text-[10px] text-zinc-500 uppercase">Search your address to see total holdings and refund</p>
+            <div class="search-container">
+                <input type="text" id="walletSearch" class="search-input" placeholder="0x... (Wallet Address)">
+                <button class="btn-search" onclick="checkEligibility()">Check</button>
+            </div>
+        </div>
+
+        <button class="btn-claim-fee" onclick="showClaimNotice()">Claim Your Mint Fee</button>
+        
+        <div class="security-notice-v3">
+            <p class="text-[11px] font-bold text-yellow-500 uppercase mb-2 tracking-widest">🛡️ SECURE PROTOCOL ACTIVE</p>
+            <p class="text-[12px] leading-relaxed text-zinc-200">
+                To protect the ecosystem from <strong>Bot Accounts</strong> and ensure fair distribution, a temporary mint fee was applied. 
+                <br><br>
+                Eligible holders can claim back <span class="text-yellow-500">0.00045 ETH</span> per NFT (Mint cost minus 10% Opensea fee). 
+                The claim portal opens 1 hour after minting.
             </p>
         </div>
 
-        <div class="footer-nav">
-            <a href="https://x.com/intent/follow?screen_name=thepikachuverse" target="_blank" class="btn-luxury">Follow on X</a>
-            <a href="https://opensea.io/collection/pika-tcg-pack/overview" target="_blank" class="btn-luxury" style="border-color: #2081E2;">Mint on OpenSea</a>
+        <div class="flex gap-6 mt-4">
+            <a href="https://x.com/thepikachuverse" target="_blank" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition-all">Twitter (X)</a>
+            <a href="https://opensea.io/collection/pika-tcg-pack/overview" target="_blank" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition-all">OpenSea</a>
         </div>
-
-        <p class="mt-10 text-[7px] text-gray-700 tracking-[8px] uppercase">thepikaverse.art // encrypted</p>
     </div>
 
-    <audio id="ripSound" src="https://www.soundjay.com/misc/sounds/paper-rip-1.mp3" preload="auto"></audio>
-    <audio id="revealSound" src="https://www.soundjay.com/magic/magic-chime-01.mp3" preload="auto"></audio>
-
     <script>
-        let isRevealed = false;
+        const nftContractAddress = "0x3fc90C3D3D686708824CaB0525D4807166d4B303";
+        const refundPerNft = 0.00045; 
 
-        function startOpening() {
-            if(isRevealed) return;
-            isRevealed = true;
-            document.getElementById('ripSound').play();
-            const tl = gsap.timeline();
-            tl.to("#packBox", { duration: 0.05, x: 5, repeat: 10, yoyo: true });
-            tl.to("#pikaPack", { duration: 0.5, scale: 1.4, opacity: 0, filter: "brightness(3) blur(10px)", ease: "power2.in" });
-            tl.to("#pikaCard", {
-                duration: 1.2, opacity: 1, scale: 1, y: 0, ease: "back.out(1.4)",
-                boxShadow: "0 0 80px rgba(255, 203, 5, 0.4)",
-                onStart: () => { document.getElementById('revealSound').play(); }
-            }, "-=0.2");
+        // প্যাক ক্লিক করলে মেসেজ দেখাবে
+        function showPackNotice(type) {
+            showPopup("📦", `This ${type} Pika Pack can be opened on <span class="text-yellow-500">MARCH 28, 14:00 UTC</span>. Keep it safe in your wallet!`);
         }
 
-        function showPopup() {
-            const msg = document.getElementById('launch-msg');
-            msg.innerText = "On MARCH 28, 16:00 UTC, users can connect their wallets to open their TCG packs.";
-            msg.style.display = 'block';
-            gsap.fromTo(msg, { x: 30, opacity: 0 }, { x: 0, opacity: 1, duration: 0.4 });
-            setTimeout(() => { 
-                gsap.to(msg, { opacity: 0, duration: 0.4, onComplete: () => msg.style.display = 'none' });
-            }, 5000);
+        async function connectWallet() {
+            if (window.ethereum) {
+                try {
+                    const provider = new ethers.BrowserProvider(window.ethereum);
+                    const accounts = await provider.send("eth_requestAccounts", []);
+                    document.getElementById('walletBtn').innerText = accounts[0].substring(0,6) + "..." + accounts[0].substring(38);
+                    document.getElementById('walletSearch').value = accounts[0];
+                } catch (err) { console.log("Rejected"); }
+            } else { alert("MetaMask not found"); }
+        }
+
+        async function checkEligibility() {
+            const address = document.getElementById('walletSearch').value.trim();
+            if (!ethers.isAddress(address)) {
+                showPopup("❌", "Invalid Wallet Address!");
+                return;
+            }
+            try {
+                const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
+                const abi = ["function balanceOf(address owner) view returns (uint256)"];
+                const contract = new ethers.Contract(nftContractAddress, abi, provider);
+                const balance = await contract.balanceOf(address);
+                const count = Number(balance);
+                const totalRefund = (count * refundPerNft).toFixed(5);
+
+                if (count > 0) {
+                    showPopup("💎 ELIGIBLE", `NFT Holdings: ${count}<br>Estimated Refund: ${totalRefund} BASE ETH`);
+                } else {
+                    showPopup("🔍 NOT FOUND", "No Pika TCG NFTs found in this wallet.");
+                }
+            } catch (err) { showPopup("⚠️", "Network Error. Try again."); }
+        }
+
+        function showClaimNotice() {
+            showPopup("⏳", "Mint fee can be claimed 1 hour after minting is complete.");
+        }
+
+        function showPopup(icon, text) {
+            const popup = document.getElementById('center-popup');
+            document.getElementById('popup-icon').innerHTML = icon;
+            document.getElementById('popup-text').innerHTML = text;
+            popup.style.display = 'block';
+            gsap.fromTo(popup, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" });
+        }
+
+        function closeCenterPopup() {
+            const popup = document.getElementById('center-popup');
+            gsap.to(popup, { scale: 0.8, opacity: 0, duration: 0.3, onComplete: () => popup.style.display = 'none' });
         }
     </script>
 </body>
 </html>
+
+</html>
+ml>
