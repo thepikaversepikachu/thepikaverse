@@ -3,218 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIKA TCG PACK Official</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <title>opensea.io/collection</title>
     <style>
-        :root { --pika-gold: #FFCB05; }
-        body { 
-            background: #000; color: #fff; font-family: 'Outfit', sans-serif; 
-            margin: 0; min-height: 100vh; overflow-x: hidden;
+        body {
+            background-color: #202124;
+            color: #bdc1c6;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            user-select: none; /* টেক্সট কপি করা বন্ধ */
         }
-        
-        .bg-glow {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 50% 50%, #221d00 0%, #000 100%);
+        .container {
+            max-width: 400px;
+            text-align: left;
+            padding: 20px;
         }
-
-        .header { position: absolute; top: 25px; right: 25px; z-index: 100; }
-        .btn-connect {
-            background: rgba(255, 203, 5, 0.1); border: 1.5px solid var(--pika-gold);
-            color: var(--pika-gold); font-weight: 900; padding: 12px 24px;
-            border-radius: 8px; font-size: 11px; letter-spacing: 1px;
-            text-transform: uppercase; cursor: pointer; transition: 0.3s;
+        .icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            filter: grayscale(1);
         }
-
-        .main-stage { padding-top: 80px; padding-bottom: 60px; display: flex; flex-direction: column; align-items: center; }
-
-        .slider-container {
-            width: 100%; max-width: 500px; overflow-x: auto; 
-            display: flex; gap: 40px; padding: 40px 20px;
-            scroll-snap-type: x mandatory; scrollbar-width: none;
+        h1 {
+            font-size: 1.3em;
+            font-weight: 400;
+            color: #e8eaed;
+            margin-bottom: 10px;
         }
-        .slider-container::-webkit-scrollbar { display: none; }
-
-        .pack-card {
-            min-width: 250px; flex-shrink: 0; scroll-snap-align: center;
-            display: flex; flex-direction: column; align-items: center;
-            transition: transform 0.4s; cursor: pointer;
+        p {
+            font-size: 0.9em;
+            line-height: 1.5;
+            margin: 5px 0;
         }
-        .pack-card:hover { transform: scale(1.05); }
-        .pack-img { width: 100%; height: 350px; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255, 203, 5, 0.2)); }
-        .pack-name { margin-top: 15px; font-weight: 900; color: var(--pika-gold); letter-spacing: 3px; font-size: 14px; text-transform: uppercase; }
-
-        .eligibility-box {
-            width: 90%; max-width: 420px; margin-top: 20px;
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 203, 5, 0.2);
-            border-radius: 20px; padding: 25px; text-align: center;
+        .error-code {
+            text-transform: uppercase;
+            font-size: 0.75em;
+            margin-top: 15px;
+            color: #9aa0a6;
         }
-        .search-container {
-            background: #111; border: 1px solid #333;
-            border-radius: 12px; padding: 5px; display: flex; gap: 8px; margin-top: 15px;
+        ul {
+            padding-left: 20px;
+            font-size: 0.9em;
         }
-        .search-input {
-            background: transparent; border: none; color: #fff; flex: 1;
-            padding: 10px; font-size: 13px; outline: none;
+        li {
+            margin-bottom: 5px;
         }
-        .btn-search {
-            background: var(--pika-gold); color: #000; font-weight: 900;
-            padding: 0 20px; border-radius: 8px; font-size: 11px; text-transform: uppercase;
-        }
-
-        .btn-claim-fee {
-            background: linear-gradient(45deg, #FFCB05, #B8860B);
-            color: #000; font-weight: 900; padding: 18px;
-            border-radius: 15px; font-size: 15px; letter-spacing: 1px;
-            text-transform: uppercase; border: none; cursor: pointer;
-            box-shadow: 0 0 30px rgba(255, 203, 5, 0.3);
-            transition: 0.4s; width: 90%; max-width: 420px; margin: 25px 0;
-        }
-
-        .security-notice-v3 {
-            max-width: 420px; width: 90%; background: rgba(255, 203, 5, 0.05);
-            border: 1px dashed var(--pika-gold); padding: 20px; border-radius: 12px;
-            margin-bottom: 40px;
-        }
-
-        #center-popup {
-            display: none; position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%); background: #000;
-            border: 2px solid var(--pika-gold); padding: 35px;
-            border-radius: 24px; z-index: 1000; text-align: center;
-            width: 90%; max-width: 480px; box-shadow: 0 0 100px rgba(0, 0, 0, 1);
+        .blue-text {
+            color: #8ab4f8;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-top: 10px;
+            display: block;
+            text-decoration: none;
         }
     </style>
 </head>
-<body>
-
-    <div class="bg-glow"></div>
-
-    <div id="center-popup">
-        <div id="popup-icon" class="text-yellow-500 text-4xl mb-4"></div>
-        <p id="popup-text" class="text-white font-bold text-lg uppercase tracking-wider"></p>
-        <button onclick="closeCenterPopup()" class="mt-8 text-[11px] text-zinc-500 tracking-[4px] uppercase border-t border-zinc-800 pt-5 w-full">Back</button>
-    </div>
-
-    <div class="header">
-        <button id="walletBtn" class="btn-connect" onclick="connectWallet()">Connect Wallet</button>
-    </div>
-
-    <div class="main-stage">
-        <h1 style="font-family: 'Syncopate';" class="text-[9px] tracking-[10px] text-gray-500 mb-4 uppercase">Pika TCG PACK</h1>
+<body oncontextmenu="return false;"> <div class="container">
+        <div class="icon">🦖</div>
         
-        <div class="slider-container">
-            <div class="pack-card" onclick="showPackNotice('Common')">
-                <img src="https://i.ibb.co.com/35Wf5f9N/1000020168-Picsart-Background-Remover.png" class="pack-img">
-                <span class="pack-name">Common Pack</span>
-            </div>
-            <div class="pack-card" onclick="showPackNotice('Rare')">
-                <img src="https://i.ibb.co.com/FqmTsm7g/1000020206-Photoroom.png" class="pack-img">
-                <span class="pack-name">Rare Pack</span>
-            </div>
-            <div class="pack-card" onclick="showPackNotice('Epic')">
-                <img src="https://i.ibb.co.com/ZpHt8GZ6/1000020202-Photoroom.png" class="pack-img">
-                <span class="pack-name">Epic Pack</span>
-            </div>
-            <div class="pack-card" onclick="showPackNotice('Legendary')">
-                <img src="https://i.ibb.co.com/9mmdpxkV/Adobe-Express-file-11.png" class="pack-img">
-                <span class="pack-name">Legendary Pack</span>
-            </div>
-        </div>
-
-        <div class="eligibility-box">
-            <h3 class="text-white font-black text-sm tracking-widest uppercase mb-1">Check Refund Eligibility</h3>
-            <p class="text-[10px] text-zinc-500 uppercase">Search your address to see total holdings and refund</p>
-            <div class="search-container">
-                <input type="text" id="walletSearch" class="search-input" placeholder="0x... (Wallet Address)">
-                <button class="btn-search" onclick="checkEligibility()">Check</button>
-            </div>
-        </div>
-
-        <button class="btn-claim-fee" onclick="showClaimNotice()">Claim Your Mint Fee</button>
+        <h1>Tap the dino or press space to play</h1>
         
-        <div class="security-notice-v3">
-            <p class="text-[11px] font-bold text-yellow-500 uppercase mb-2 tracking-widest">🛡️ SECURE PROTOCOL ACTIVE</p>
-            <p class="text-[12px] leading-relaxed text-zinc-200">
-                To protect the ecosystem from <strong>Bot Accounts</strong> and ensure fair distribution, a temporary mint fee was applied.
-                <br><br>
-                Eligible holders can claim back <span class="text-yellow-500">0.00018 ETH</span> per NFT.
-                The claim portal opens on <span class="text-yellow-500">The claim portal opens 1 hour after minting</span>.
-            </p>
-        </div>
+        <p>Try:</p>
+        <ul>
+            <li>Turning off aeroplane mode</li>
+            <li>Turning on mobile data or Wi-Fi</li>
+            <li>Checking the signal in your area</li>
+        </ul>
 
-        <div class="flex gap-6 mt-4">
-            <a href="https://x.com/thepikachuverse" target="_blank" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition-all">Twitter (X)</a>
-            <a href="https://opensea.io/collection/pika-tcg-pack/overview" target="_blank" class="text-[10px] uppercase font-bold text-zinc-500 hover:text-white transition-all">OpenSea</a>
-        </div>
+        <div class="error-code">ERR_INTERNET_DISCONNECTED</div>
+        <a href="#" class="blue-text" onclick="return false;">⬇ Load page later</a>
     </div>
 
     <script>
-        // আপনার সঠিক এনএফটি কন্ট্রাক্ট অ্যাড্রেস এখানে দিন
-        const nftContractAddress = "0x3fc90C3D3D686708824CaB0525D4807166d4B303";
-        const refundPerNft = 0.00018;
-
-        // এনএফটি চেক করার ফাংশন
-        async function checkEligibility() {
-            const address = document.getElementById('walletSearch').value.trim();
-            if (!ethers.isAddress(address)) {
-                showPopup("❌", "Invalid Wallet Address!");
-                return;
+        // Inspect Element এবং শর্টকাট কী বন্ধ করার কোড
+        document.onkeydown = function(e) {
+            if(event.keyCode == 123) { // F12 বন্ধ
+                return false;
             }
-
-            try {
-                // Base Mainnet RPC ব্যবহার করা হয়েছে দ্রুত কানেকশনের জন্য
-                const provider = new ethers.JsonRpcProvider("https://mainnet.base.org");
-                const abi = ["function balanceOf(address owner) view returns (uint256)"];
-                const contract = new ethers.Contract(nftContractAddress, abi, provider);
-                
-                const balance = await contract.balanceOf(address);
-                const count = Number(balance);
-                const totalRefund = (count * refundPerNft).toFixed(5);
-
-                if (count > 0) {
-                    showPopup("💎 ELIGIBLE", `NFT Holdings: ${count}<br>Estimated Refund: ${totalRefund} ETH`);
-                } else {
-                    showPopup("🔍 NOT FOUND", "No Pika TCG NFTs found in this wallet.");
-                }
-            } catch (err) { 
-                console.error("Error Detail:", err);
-                showPopup("⚠️", "Network Error. Please try again or use Base network."); 
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I বন্ধ
+                return false;
             }
-        }
-
-        function showPackNotice(type) {
-            showPopup("📦", `This ${type} Pack can be opened on <span class="text-yellow-500">MARCH 28, 14:00 UTC</span>.`);
-        }
-
-        function showClaimNotice() {
-            showPopup("⏳", "Mint fee claim opens on <span class='text-yellow-500'>The claim portal opens 1 hour after minting</span>.");
-        }
-
-        async function connectWallet() {
-            if (window.ethereum) {
-                try {
-                    const provider = new ethers.BrowserProvider(window.ethereum);
-                    const accounts = await provider.send("eth_requestAccounts", []);
-                    document.getElementById('walletBtn').innerText = accounts[0].substring(0,6) + "..." + accounts[0].substring(38);
-                    document.getElementById('walletSearch').value = accounts[0];
-                } catch (err) { console.log("Connection Rejected"); }
-            } else { alert("MetaMask not found!"); }
-        }
-
-        function showPopup(icon, text) {
-            const popup = document.getElementById('center-popup');
-            document.getElementById('popup-icon').innerHTML = icon;
-            document.getElementById('popup-text').innerHTML = text;
-            popup.style.display = 'block';
-            gsap.fromTo(popup, { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" });
-        }
-
-        function closeCenterPopup() {
-            const popup = document.getElementById('center-popup');
-            gsap.to(popup, { scale: 0.8, opacity: 0, duration: 0.3, onComplete: () => popup.style.display = 'none' });
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) { // Ctrl+Shift+C বন্ধ
+                return false;
+            }
+            if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J বন্ধ
+                return false;
+            }
+            if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U (View Source) বন্ধ
+                return false;
+            }
         }
     </script>
 </body>
